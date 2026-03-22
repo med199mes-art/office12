@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مكتب الأستاذ عبد السلام بنسيسي</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<style>
+:root{
+  --navy:#0d1f3c;--navy2:#132840;--navy3:#1a3557;
+  --gold:#c9a84c;--gold2:#e2c16b;--gold3:#f5e6b8;--gold4:#fdf8ec;
+  --cream:#faf7f0;--cream2:#f0ebe0;--white:#fff;--ink:#1a1208;--muted:#6b7280;
+  --border:rgba(201,168,76,.25);--border2:rgba(201,168,76,.1);
+  --sh-sm:0 2px 8px rgba(13,31,60,.08);--sh-md:0 6px 24px rgba(13,31,60,.13);--sh-lg:0 20px 60px rgba(13,31,60,.22);
+  --red:#b91c1c;--green:#166534;--orange:#c2410c;--blue:#1d4ed8;--purple:#6d28d9;--teal:#0f766e;
+  --r8:8px;--r12:12px;--r16:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Tajawal',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+
+/* ── LOGIN SCREEN ── */
+#loginScreen{position:fixed;inset:0;background:var(--navy);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2rem;}
+#loginScreen.hidden{display:none;}
+.login-box{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r16);padding:2.5rem 3rem;width:360px;max-width:95vw;text-align:center;}
+.login-seal{font-size:3rem;margin-bottom:.5rem;}
+.login-title{font-family:'Amiri',serif;font-size:1.4rem;color:var(--gold3);margin-bottom:.3rem;}
+.login-sub{font-size:.75rem;color:rgba(229,214,180,.5);margin-bottom:2rem;}
+.login-input{width:100%;padding:.8rem 1rem;background:rgba(255,255,255,.08);border:1.5px solid var(--border);border-radius:var(--r8);color:var(--gold3);font-family:'Tajawal',sans-serif;font-size:1rem;text-align:center;letter-spacing:.3em;outline:none;margin-bottom:1rem;}
+.login-input:focus{border-color:var(--gold);}
+.login-btn{width:100%;padding:.8rem;background:var(--gold);color:var(--navy);border:none;border-radius:var(--r8);font-family:'Tajawal',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s;}
+.login-btn:hover{background:var(--gold2);}
+.login-err{color:#f87171;font-size:.8rem;margin-top:.5rem;display:none;}
+
+/* ── HEADER ── */
+.hdr{background:var(--navy);position:sticky;top:0;z-index:300;border-bottom:2px solid var(--gold);box-shadow:0 4px 24px rgba(0,0,0,.3);}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:66px;}
+.brand{display:flex;align-items:center;gap:12px;}
+.seal{width:44px;height:44px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--navy2),var(--navy3));color:var(--gold2);font-size:1.3rem;flex-shrink:0;}
+.brand-text .t1{font-family:'Amiri',serif;font-size:1.15rem;color:var(--gold3);line-height:1.2;}
+.brand-text .t2{font-size:.65rem;color:rgba(229,214,180,.45);letter-spacing:.04em;}
+.hdr-right{display:flex;align-items:center;gap:6px;}
+.hbtn{background:rgba(201,168,76,.1);color:var(--gold3);border:1px solid rgba(201,168,76,.25);border-radius:var(--r8);padding:.38rem .8rem;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.76rem;font-weight:500;transition:all .2s;display:flex;align-items:center;gap:4px;white-space:nowrap;}
+.hbtn:hover{background:rgba(201,168,76,.2);border-color:var(--gold);}
+.hbtn.gold{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:700;}
+.hbtn.gold:hover{background:var(--gold2);}
+.nb{background:var(--red);color:#fff;font-size:.58rem;font-weight:900;padding:1px 5px;border-radius:8px;}
+.sync-pill{display:flex;align-items:center;gap:4px;font-size:.68rem;padding:.25rem .6rem;border-radius:12px;border:1px solid var(--border2);}
+
+/* week bar */
+.wkbar{background:var(--navy2);border-top:1px solid var(--border2);padding:0 1.5rem;height:40px;display:flex;align-items:center;justify-content:space-between;}
+.wk-nav{display:flex;align-items:center;gap:6px;}
+.wkarr{background:none;border:1px solid var(--border);color:var(--gold);width:24px;height:24px;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.75rem;transition:all .2s;}
+.wkarr:hover{background:rgba(201,168,76,.15);}
+.wklbl{font-size:.8rem;color:var(--gold3);font-weight:500;}
+.today-pill{background:var(--gold);color:var(--navy);font-size:.65rem;font-weight:700;padding:2px 9px;border-radius:20px;cursor:pointer;border:none;font-family:'Tajawal',sans-serif;}
+.stats-row{display:flex;gap:5px;}
+.spill{display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:20px;padding:2px 8px;font-size:.65rem;color:rgba(229,214,180,.6);}
+.spill b{color:var(--gold2);font-size:.72rem;}
+.sdot{width:5px;height:5px;border-radius:50%;}
+
+/* ── LAYOUT ── */
+.app{display:flex;min-height:calc(100vh - 106px);}
+
+/* ── SIDEBAR ── */
+.sidebar{width:225px;background:var(--navy);border-left:1px solid var(--border2);padding:.9rem .65rem;flex-shrink:0;display:flex;flex-direction:column;gap:1rem;overflow-y:auto;}
+.sb-lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.15em;color:rgba(201,168,76,.4);padding:0 .4rem;margin-bottom:.2rem;}
+.sbtn{width:100%;background:none;border:none;color:rgba(229,214,180,.6);padding:.48rem .65rem;border-radius:var(--r8);text-align:right;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.8rem;display:flex;align-items:center;gap:6px;transition:all .18s;margin-bottom:1px;position:relative;}
+.sbtn:hover{background:rgba(201,168,76,.09);color:var(--gold3);}
+.sbtn.active{background:rgba(201,168,76,.14);color:var(--gold2);border-right:3px solid var(--gold);font-weight:600;}
+.sbtn .si{font-size:.88rem;width:15px;text-align:center;}
+.sbtn .nb{margin-right:auto;}
+.sb-sep{height:1px;background:var(--border2);margin:.15rem 0;}
+.cf-btn{width:100%;background:none;border:1px solid transparent;color:rgba(229,214,180,.45);padding:.35rem .65rem;border-radius:var(--r8);text-align:right;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.72rem;display:flex;align-items:center;justify-content:space-between;transition:all .18s;margin-bottom:1px;}
+.cf-btn:hover{background:rgba(201,168,76,.07);color:var(--gold3);}
+.cf-btn.active{background:rgba(201,168,76,.11);color:var(--gold2);border-color:var(--border);}
+.cc{background:rgba(201,168,76,.18);color:var(--gold2);font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:9px;}
+.sb-sub{font-size:.58rem;color:rgba(229,214,180,.25);padding:0 .65rem;margin:.15rem 0;}
+
+/* dark mode toggle */
+body.dark{--cream:#0f1923;--cream2:#151f2e;--white:#182030;--ink:#e8dcc8;--muted:#94a3b8;--border2:rgba(201,168,76,.08);}
+body.dark .sessions-tbl td{border-color:#1e2d40;}
+body.dark .dfield{background:#182030;border-color:#1e2d40;}
+
+/* ── MAIN ── */
+.main{flex:1;padding:1.3rem 1.3rem 3rem;overflow-y:auto;}
+.view{display:none;}
+.view.active{display:block;}
+
+/* ── SEARCH BAR (global) ── */
+.global-search{position:relative;margin-bottom:1.2rem;}
+.global-search input{width:100%;padding:.65rem 1rem .65rem 2.8rem;border:1.5px solid #ddd4b8;border-radius:30px;font-family:'Tajawal',sans-serif;font-size:.88rem;background:var(--white);outline:none;transition:all .2s;direction:rtl;}
+.global-search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1);}
+.global-search .gs-icon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.9rem;pointer-events:none;}
+.search-results{position:absolute;top:calc(100% + 5px);right:0;left:0;background:var(--white);border:1px solid #e8e0d0;border-radius:var(--r12);box-shadow:var(--sh-lg);z-index:100;max-height:350px;overflow-y:auto;display:none;}
+.search-results.show{display:block;}
+.sr-item{padding:.65rem 1rem;cursor:pointer;transition:background .15s;border-bottom:1px solid #f0ebe0;display:flex;align-items:center;gap:10px;}
+.sr-item:hover{background:var(--gold4);}
+.sr-item:last-child{border-bottom:none;}
+.sr-icon{font-size:1rem;flex-shrink:0;}
+.sr-main{flex:1;}
+.sr-title{font-size:.82rem;font-weight:700;color:var(--navy);}
+.sr-sub{font-size:.7rem;color:var(--muted);}
+
+/* ── DASHBOARD ── */
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:1.3rem;}
+.dash-card{background:var(--white);border-radius:var(--r12);border:1px solid #e8e0d0;padding:1rem 1.1rem;box-shadow:var(--sh-sm);cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.dash-card:hover{box-shadow:var(--sh-md);transform:translateY(-2px);}
+.dash-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;background:var(--dc,var(--gold));}
+.dash-num{font-size:2rem;font-weight:900;color:var(--dc,var(--gold));line-height:1;}
+.dash-label{font-size:.72rem;color:var(--muted);margin-top:3px;}
+.dash-icon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);font-size:2rem;opacity:.08;}
+.dash-bottom{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.3rem;}
+.chart-box{background:var(--white);border-radius:var(--r12);border:1px solid #e8e0d0;padding:1rem 1.1rem;box-shadow:var(--sh-sm);}
+.chart-title{font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:.8rem;}
+.bar-chart{display:flex;flex-direction:column;gap:.5rem;}
+.bar-row{display:flex;align-items:center;gap:.6rem;}
+.bar-label{font-size:.7rem;color:var(--muted);width:120px;text-align:right;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bar-track{flex:1;height:10px;background:#f0ebe0;border-radius:5px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:5px;transition:width .6s ease;}
+.bar-val{font-size:.68rem;font-weight:700;color:var(--navy);width:25px;text-align:left;flex-shrink:0;}
+.fees-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid #f0ebe0;font-size:.8rem;}
+.fees-row:last-child{border-bottom:none;}
+
+/* ── CALENDAR ── */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.cal-month{font-family:'Amiri',serif;font-size:1.2rem;color:var(--navy);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.cal-day-name{text-align:center;font-size:.65rem;font-weight:700;color:var(--muted);padding:.4rem 0;}
+.cal-cell{min-height:70px;background:var(--white);border:1px solid #f0ebe0;border-radius:var(--r8);padding:.3rem .4rem;cursor:pointer;transition:all .15s;position:relative;}
+.cal-cell:hover{border-color:var(--gold);background:var(--gold4);}
+.cal-cell.today{border-color:var(--gold);background:var(--gold4);}
+.cal-cell.other-month{opacity:.35;}
+.cal-cell.has-sessions{border-color:rgba(201,168,76,.4);}
+.cal-day-num{font-size:.72rem;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.cal-cell.today .cal-day-num{background:var(--gold);color:var(--navy);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;}
+.cal-sess-dot{font-size:.6rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px;padding:1px 3px;border-radius:3px;line-height:1.3;}
+.cal-more{font-size:.58rem;color:var(--gold);font-weight:700;}
+
+/* ── WEEK GRID ── */
+.wgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;}
+.dcol{background:var(--white);border:1px solid #e8e0d0;border-radius:var(--r16);overflow:hidden;box-shadow:var(--sh-sm);transition:box-shadow .2s;}
+.dcol:hover{box-shadow:var(--sh-md);}
+.dchdr{padding:.7rem .85rem;background:var(--navy);border-bottom:2px solid var(--gold);display:flex;align-items:center;justify-content:space-between;}
+.dchdr.today{background:linear-gradient(135deg,#1a3d70,#0d2855);border-bottom-color:var(--gold2);}
+.dcname{font-family:'Amiri',serif;font-size:.95rem;color:var(--gold3);}
+.dcdate{font-size:.65rem;color:rgba(229,214,180,.55);margin-top:1px;}
+.dchdr-r{display:flex;flex-direction:column;align-items:flex-end;gap:2px;}
+.dcount{background:rgba(201,168,76,.18);color:var(--gold2);font-size:.62rem;font-weight:700;padding:1px 7px;border-radius:10px;border:1px solid rgba(201,168,76,.25);}
+.dchdr.today .dcount{background:var(--gold);color:var(--navy);}
+.sort-btn{background:rgba(201,168,76,.15);border:none;color:var(--gold2);font-size:.56rem;padding:1px 6px;border-radius:4px;cursor:pointer;font-family:'Tajawal',sans-serif;}
+.dcbody{padding:.5rem;}
+.cgrp{margin-bottom:.65rem;}
+.cgrp-hdr{display:flex;align-items:center;gap:4px;padding:.28rem .4rem;border-radius:var(--r8);margin-bottom:.3rem;}
+.cgrp-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.cgrp-name{font-size:.62rem;font-weight:700;flex:1;}
+.cgrp-cnt{font-size:.58rem;font-weight:700;padding:1px 5px;border-radius:7px;}
+.scard{background:var(--cream);border:1px solid #e8e0d0;border-right:3px solid var(--ct,#c9a84c);border-radius:var(--r8);padding:.48rem .55rem;margin-bottom:.28rem;cursor:pointer;transition:all .18s;}
+.scard:hover{background:var(--white);box-shadow:var(--sh-sm);transform:translateY(-1px);}
+.scard.done{opacity:.5;}
+.scard.postponed{border-right-color:var(--orange)!important;}
+.scard.urgent{border-right-color:var(--red)!important;}
+.scard.tabligh{border-right-color:var(--teal)!important;}
+.scard.tanfidh{border-right-color:var(--purple)!important;}
+.sc-top{display:flex;align-items:center;justify-content:space-between;gap:3px;margin-bottom:2px;}
+.sc-time{font-size:.6rem;color:var(--gold);font-weight:700;}
+.sc-fnum{font-size:.55rem;background:var(--navy);color:var(--gold3);padding:1px 5px;border-radius:4px;font-family:monospace;}
+.sc-client{font-size:.74rem;font-weight:700;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;}
+.sc-meta{font-size:.6rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;}
+.sc-bot{display:flex;align-items:center;gap:3px;flex-wrap:wrap;}
+.badge{display:inline-block;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:8px;border:1px solid transparent;}
+.badge-pending{background:#fff7ed;color:#c2410c;border-color:#fed7aa;}
+.badge-done{background:#f0fdf4;color:#15803d;border-color:#bbf7d0;}
+.badge-postponed{background:#fefce8;color:#92400e;border-color:#fde68a;}
+.badge-urgent{background:#fef2f2;color:#b91c1c;border-color:#fecaca;}
+.badge-tabligh{background:#f0fdfa;color:#0f766e;border-color:#99f6e4;}
+.badge-tanfidh{background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe;}
+.type-civil{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;}
+.type-commercial{background:#fff7ed;color:#c2410c;border-color:#fed7aa;}
+.type-administrative{background:#f0fdfa;color:#0f766e;border-color:#99f6e4;}
+.type-family{background:#fdf4ff;color:#7e22ce;border-color:#e9d5ff;}
+.type-real-estate{background:#fdf8ec;color:#b45309;border-color:#fde68a;}
+.type-criminal{background:#fef2f2;color:#b91c1c;border-color:#fecaca;}
+.type-labor{background:#ecfdf5;color:#065f46;border-color:#a7f3d0;}
+.add-day-btn{width:100%;background:none;border:1px dashed #d4c9b0;border-radius:var(--r8);padding:.35rem;color:#b8a880;font-size:.68rem;font-family:'Tajawal',sans-serif;cursor:pointer;transition:all .18s;margin-top:2px;}
+.add-day-btn:hover{background:var(--gold4);border-color:var(--gold);color:var(--gold);}
+.empty-day{text-align:center;padding:1rem .5rem;color:#bbb;font-size:.7rem;}
+
+/* ── TABLE ── */
+.tbl-filters{display:flex;gap:6px;margin-bottom:.9rem;flex-wrap:wrap;align-items:center;}
+.tfi{padding:.45rem .75rem;border:1.5px solid #ddd4b8;border-radius:var(--r8);font-family:'Tajawal',sans-serif;font-size:.78rem;background:var(--white);outline:none;transition:border-color .2s;}
+.tfi:focus{border-color:var(--gold);}
+.sessions-tbl{width:100%;border-collapse:collapse;background:var(--white);border-radius:var(--r12);overflow:hidden;box-shadow:var(--sh-sm);font-size:.78rem;}
+.sessions-tbl thead{background:var(--navy);color:var(--gold3);}
+.sessions-tbl th{padding:.75rem .85rem;text-align:right;font-size:.68rem;font-weight:600;letter-spacing:.02em;white-space:nowrap;}
+.sessions-tbl td{padding:.65rem .85rem;border-bottom:1px solid #f0ebe0;vertical-align:middle;}
+.sessions-tbl tr:last-child td{border-bottom:none;}
+.sessions-tbl tbody tr{cursor:pointer;transition:background .15s;}
+.sessions-tbl tbody tr:hover td{background:var(--gold4);}
+
+/* ── CLIENTS ── */
+.clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.85rem;}
+.client-card{background:var(--white);border-radius:var(--r12);border:1px solid #e8e0d0;padding:1rem 1.1rem;box-shadow:var(--sh-sm);cursor:pointer;transition:all .18s;border-right:4px solid var(--gold);}
+.client-card:hover{box-shadow:var(--sh-md);transform:translateY(-1px);}
+.cl-name{font-size:.92rem;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.cl-stats{display:flex;gap:8px;font-size:.7rem;color:var(--muted);margin-bottom:.5rem;}
+.cl-stat{display:flex;align-items:center;gap:3px;}
+.cl-files{display:flex;gap:4px;flex-wrap:wrap;}
+
+/* ── FEES ── */
+.fees-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.85rem;}
+.fee-card{background:var(--white);border-radius:var(--r12);border:1px solid #e8e0d0;padding:1rem 1.1rem;box-shadow:var(--sh-sm);cursor:pointer;transition:all .18s;}
+.fee-card:hover{box-shadow:var(--sh-md);}
+.fee-card.overdue{border-right:4px solid var(--red);}
+.fee-card.paid{border-right:4px solid var(--green);}
+.fee-card.partial{border-right:4px solid var(--orange);}
+.fee-card.pending{border-right:4px solid var(--muted);}
+.fee-progress{margin-top:.6rem;}
+.fee-bar{height:8px;background:#f0ebe0;border-radius:4px;overflow:hidden;margin-top:3px;}
+.fee-fill{height:100%;border-radius:4px;transition:width .5s;}
+
+/* ── NOTIFICATIONS ── */
+.notif-list{display:flex;flex-direction:column;gap:.65rem;}
+.notif-card{background:var(--white);border-radius:var(--r12);border:1px solid #e8e0d0;padding:.9rem 1.1rem;display:flex;align-items:flex-start;gap:10px;box-shadow:var(--sh-sm);cursor:pointer;transition:all .18s;}
+.notif-card:hover{box-shadow:var(--sh-md);border-color:var(--gold);}
+.notif-card.crit{border-color:#fecaca;background:#fffafa;}
+.notif-icon{font-size:1.3rem;flex-shrink:0;margin-top:1px;}
+.notif-body{flex:1;}
+.notif-title{font-weight:700;color:var(--navy);font-size:.86rem;margin-bottom:2px;}
+.notif-sub{font-size:.74rem;color:var(--muted);}
+.notif-time{font-size:.67rem;font-weight:700;padding:2px 9px;border-radius:10px;flex-shrink:0;margin-top:1px;white-space:nowrap;}
+.nt-urgent{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;}
+.nt-soon{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;}
+.nt-postponed{background:#fefce8;color:#92400e;border:1px solid #fde68a;}
+.nt-week{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;}
+.nt-green{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;}
+
+/* ── ARCHIVE ── */
+.archive-tabs{display:flex;gap:5px;margin-bottom:1rem;flex-wrap:wrap;}
+.atab{background:var(--white);border:1.5px solid #ddd4b8;border-radius:var(--r8);padding:.4rem .9rem;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.78rem;color:var(--muted);transition:all .2s;}
+.atab.active{background:var(--navy);color:var(--gold3);border-color:var(--navy);}
+.archive-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem;}
+.arc-card{background:var(--white);border-radius:var(--r12);border:1px solid #e8e0d0;padding:.9rem 1rem;box-shadow:var(--sh-sm);cursor:pointer;transition:all .18s;border-right:4px solid var(--ct,var(--gold));}
+.arc-card:hover{box-shadow:var(--sh-md);transform:translateY(-1px);}
+
+/* ── TT + KHUBARA ── */
+.tt-tabs{display:flex;gap:0;border-radius:var(--r8);overflow:hidden;border:1px solid #ddd4b8;width:fit-content;}
+.ttab{background:var(--white);border:none;padding:.48rem 1.1rem;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.82rem;color:var(--muted);font-weight:600;transition:all .2s;}
+.ttab:not(:last-child){border-left:1px solid #ddd4b8;}
+.ttab.act-t{background:#f0fdfa;color:#0f766e;}
+.ttab.act-e{background:#f5f3ff;color:#6d28d9;}
+.ttab.act-k{background:#f0f9ff;color:#0369a1;}
+.tt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:.85rem;}
+.tt-card{background:var(--white);border-radius:var(--r12);border:1px solid #e8e0d0;padding:.95rem 1.05rem;box-shadow:var(--sh-sm);cursor:pointer;transition:all .18s;}
+.tt-card:hover{box-shadow:var(--sh-md);}
+.tt-card.tabligh{border-right:4px solid #0f766e;}
+.tt-card.tanfidh{border-right:4px solid #6d28d9;}
+.tt-card.khubara{border-right:4px solid #0369a1;}
+.kh-dates{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin:.45rem 0;}
+.kh-date-box{background:#f8f5ff;border:1px solid #ede9fe;border-radius:6px;padding:.35rem .4rem;text-align:center;}
+.kh-date-box .dbl{font-size:.55rem;color:#6d28d9;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:1px;}
+.kh-date-box .dv{font-size:.68rem;font-weight:700;color:var(--navy);}
+.kh-date-box.ov{background:#fef2f2;border-color:#fecaca;}
+.kh-date-box.ov .dv{color:var(--red);}
+.kh-date-box.sn{background:#fff7ed;border-color:#fed7aa;}
+.kh-date-box.sn .dv{color:var(--orange);}
+.stage-pill{font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:9px;border:1px solid transparent;}
+.stage-appointed{background:#f0f9ff;color:#0369a1;border-color:#bae6fd;}
+.stage-provision{background:#fef9c3;color:#854d0e;border-color:#fde68a;}
+.stage-ongoing{background:#f0fdfa;color:#0f766e;border-color:#99f6e4;}
+.stage-site_visit{background:#fff7ed;color:#c2410c;border-color:#fed7aa;}
+.stage-draft{background:#fdf4ff;color:#7e22ce;border-color:#e9d5ff;}
+.stage-submitted{background:#ecfdf5;color:#166534;border-color:#bbf7d0;}
+.stage-done{background:#f0fdf4;color:#166534;border-color:#bbf7d0;}
+
+/* ── TEMPLATES ── */
+.tpl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.85rem;}
+.tpl-card{background:var(--white);border-radius:var(--r12);border:1px solid #e8e0d0;padding:1.1rem;box-shadow:var(--sh-sm);text-align:center;cursor:pointer;transition:all .2s;}
+.tpl-card:hover{box-shadow:var(--sh-md);border-color:var(--gold);transform:translateY(-2px);}
+.tpl-icon{font-size:2rem;margin-bottom:.5rem;display:block;}
+.tpl-name{font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.tpl-desc{font-size:.68rem;color:var(--muted);line-height:1.5;margin-bottom:.7rem;}
+.tpl-btn{display:inline-flex;align-items:center;gap:4px;background:var(--navy);color:var(--gold3);border:none;border-radius:var(--r8);padding:.4rem .85rem;font-family:'Tajawal',sans-serif;font-size:.75rem;cursor:pointer;transition:background .2s;}
+.tpl-btn:hover{background:var(--navy3);}
+
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(10,20,45,.72);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(3px);}
+.overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--cream);border:1.5px solid var(--gold);border-radius:var(--r16);width:660px;max-width:96vw;max-height:92vh;overflow-y:auto;transform:scale(.96) translateY(12px);transition:transform .22s;box-shadow:var(--sh-lg);}
+.overlay.open .modal{transform:scale(1) translateY(0);}
+.modal.wide{width:820px;}
+.modal.narrow{width:460px;}
+.mhdr{background:var(--navy);padding:.95rem 1.3rem;display:flex;align-items:center;justify-content:space-between;border-radius:14px 14px 0 0;border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:10;}
+.mtitle{font-family:'Amiri',serif;font-size:1.05rem;color:var(--gold3);}
+.mx{background:none;border:none;color:var(--gold);font-size:1.1rem;cursor:pointer;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.mx:hover{background:rgba(255,255,255,.1);}
+.mbody{padding:1.2rem 1.3rem;}
+.mftr{padding:.85rem 1.3rem;display:flex;gap:.6rem;border-top:1px solid #e8e0d0;background:#f5f0e5;border-radius:0 0 14px 14px;position:sticky;bottom:0;}
+.btn{padding:.55rem 1.1rem;border-radius:var(--r8);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.84rem;font-weight:600;transition:all .18s;border:none;display:inline-flex;align-items:center;gap:5px;}
+.btn-navy{background:var(--navy);color:var(--gold3);}
+.btn-navy:hover{background:var(--navy3);}
+.btn-gold{background:var(--gold);color:var(--navy);}
+.btn-gold:hover{background:var(--gold2);}
+.btn-out{background:var(--white);color:var(--ink);border:1.5px solid #ddd4b8;}
+.btn-out:hover{border-color:var(--gold);}
+.btn-red{background:var(--red);color:#fff;margin-right:auto;}
+.btn-red:hover{opacity:.85;}
+.btn-green{background:#15803d;color:#fff;}
+.btn-teal{background:#0f766e;color:#fff;}
+.btn-purple{background:#6d28d9;color:#fff;}
+
+/* Form */
+.fsec{margin-bottom:1rem;}
+.fsec-t{font-size:.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.55rem;padding-bottom:.28rem;border-bottom:1px solid var(--border);}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem;}
+.frow.c3{grid-template-columns:1fr 1fr 1fr;}
+.frow.c1{grid-template-columns:1fr;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fg.s2{grid-column:1/-1;}
+.fg label{font-size:.7rem;font-weight:600;color:var(--navy);}
+.fg input,.fg select,.fg textarea{padding:.5rem .72rem;border:1.5px solid #ddd4b8;border-radius:var(--r8);font-family:'Tajawal',sans-serif;font-size:.82rem;background:var(--white);color:var(--ink);outline:none;transition:border-color .18s,box-shadow .18s;direction:rtl;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1);}
+.fg textarea{resize:vertical;min-height:65px;}
+
+/* Detail */
+.det-hdr{display:flex;align-items:flex-start;gap:12px;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid #e8e0d0;}
+.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.85rem;}
+.dfield{background:var(--white);border:1px solid #e8e0d0;border-radius:var(--r8);padding:.55rem .7rem;}
+.dfield .dk{font-size:.62rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;}
+.dfield .dv{font-size:.82rem;color:var(--ink);font-weight:500;}
+.dfield.full{grid-column:1/-1;}
+.notes-bx{background:var(--gold4);border:1px solid var(--border);border-radius:var(--r8);padding:.7rem .85rem;margin-bottom:.85rem;font-size:.82rem;line-height:1.7;}
+.mhk-sec{background:linear-gradient(135deg,#0a3d20,#0f5c30);border-radius:var(--r12);padding:.85rem 1rem;margin-bottom:.85rem;}
+.mhk-title{color:#a7f3d0;font-size:.72rem;font-weight:700;margin-bottom:.5rem;display:flex;align-items:center;gap:4px;}
+.mhk-link{display:inline-flex;align-items:center;gap:6px;background:#15803d;color:#fff;padding:.44rem .9rem;border-radius:var(--r8);font-size:.78rem;font-weight:600;text-decoration:none;border:none;cursor:pointer;transition:background .2s;margin-bottom:.65rem;}
+.mhk-link:hover{background:#166534;}
+.nh-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.nh-row label{font-size:.68rem;color:#a7f3d0;font-weight:600;white-space:nowrap;}
+.nh-row input{padding:.36rem .6rem;border:1px solid rgba(167,243,208,.3);border-radius:6px;background:rgba(255,255,255,.1);color:#fff;font-family:'Tajawal',sans-serif;font-size:.78rem;direction:ltr;outline:none;}
+.nh-save{background:#15803d;color:#fff;border:none;border-radius:6px;padding:.36rem .8rem;font-size:.74rem;font-family:'Tajawal',sans-serif;cursor:pointer;}
+
+/* Print card */
+@media print{
+  .sidebar,.hdr-right,.wkbar,.add-day-btn,.hbtn,#loginScreen,.overlay{display:none!important;}
+  .app{display:block;}
+  .wgrid{grid-template-columns:repeat(2,1fr);}
+}
+
+/* Toast */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(16px);background:var(--navy);color:var(--gold3);padding:.65rem 1.8rem;border-radius:30px;border:1px solid var(--gold);font-size:.84rem;opacity:0;pointer-events:none;transition:all .28s;z-index:9999;box-shadow:var(--sh-lg);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* Section title */
+.sec-title{font-family:'Amiri',serif;font-size:1.25rem;color:var(--navy);margin-bottom:1.1rem;display:flex;align-items:center;gap:9px;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border);opacity:.5;}
+.portal-bar{display:flex;align-items:center;justify-content:space-between;background:var(--white);border-radius:var(--r12);padding:.85rem 1.1rem;border:1px solid #e8e0d0;box-shadow:var(--sh-sm);margin-bottom:1.1rem;flex-wrap:wrap;gap:8px;}
+.portal-btn{display:inline-flex;align-items:center;gap:6px;padding:.45rem 1rem;border-radius:var(--r8);font-family:'Tajawal',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:all .2s;}
+.portal-btn.green{background:linear-gradient(135deg,#0a3d20,#0f5c30);color:#a7f3d0;}
+.portal-btn.blue{background:linear-gradient(135deg,var(--navy),var(--navy3));color:var(--gold3);}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="loginScreen">
+  <div style="text-align:center;margin-bottom:1rem">
+    <div style="font-size:3.5rem">⚖️</div>
+    <div style="font-family:'Amiri',serif;font-size:1.1rem;color:rgba(229,214,180,.5);margin-top:.5rem">مكتب الأستاذ عبد السلام بنسيسي</div>
+  </div>
+  <div class="login-box">
+    <div class="login-title">🔐 كلمة المرور</div>
+    <div class="login-sub">محامي بهيئة المحامين بطنجة</div>
+    <input class="login-input" type="password" id="pwdInput" placeholder="••••" maxlength="20" onkeydown="if(event.key==='Enter')checkPwd()">
+    <button class="login-btn" onclick="checkPwd()">دخول</button>
+    <div class="login-err" id="pwdErr">كلمة المرور غير صحيحة</div>
+    <div style="font-size:.62rem;color:rgba(229,214,180,.25);margin-top:.8rem">v4.0</div>
+  </div>
+</div>
+
+<!-- ══ HEADER ══ -->
+<header class="hdr" id="appHeader" style="display:none">
+  <div class="hdr-top">
+    <div class="brand">
+      <div class="seal">⚖</div>
+      <div class="brand-text">
+        <div class="t1">مكتب الأستاذ عبد السلام بنسيسي</div>
+        <div class="t2">محامي بهيئة المحامين بطنجة &nbsp;·&nbsp; Barreau de Tanger</div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <div id="syncStatus" class="sync-pill" style="color:var(--gold);border-color:var(--border)">🔄 جارٍ التحميل</div>
+      <button class="hbtn" onclick="switchView('notif')">🔔 <span class="nb" id="notifBadge">0</span></button>
+      <button class="hbtn" onclick="toggleDark()" id="darkBtn">🌙</button>
+      <button class="hbtn" onclick="openMahakim('')">🌐 mahakim</button>
+      <button class="hbtn" onclick="window.print()">🖨</button>
+      <button class="hbtn gold" onclick="openAddModal(null)">➕ جلسة جديدة</button>
+    </div>
+  </div>
+  <div class="wkbar">
+    <div class="wk-nav">
+      <button class="wkarr" onclick="changeWeek(-1)">▶</button>
+      <span class="wklbl" id="weekLabel"></span>
+      <button class="wkarr" onclick="changeWeek(1)">◀</button>
+      <button class="today-pill" onclick="resetWeek()">اليوم</button>
+    </div>
+    <div class="stats-row">
+      <div class="spill"><span class="sdot" style="background:#c9a84c"></span><span>الأسبوع:</span><b id="sp-t">0</b></div>
+      <div class="spill"><span class="sdot" style="background:#c2410c"></span><span>قادمة:</span><b id="sp-p">0</b></div>
+      <div class="spill"><span class="sdot" style="background:#166534"></span><span>منتهية:</span><b id="sp-d">0</b></div>
+      <div class="spill"><span class="sdot" style="background:#92400e"></span><span>مؤجلة:</span><b id="sp-pp">0</b></div>
+      <div class="spill"><span class="sdot" style="background:#0f766e"></span><span>تبليغ/تنفيذ:</span><b id="sp-tt">0</b></div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ APP ══ -->
+<div class="app" id="appBody" style="display:none">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div>
+    <div class="sb-lbl">الصفحات</div>
+    <button class="sbtn active" id="nav-dash" onclick="switchView('dash')"><span class="si">📊</span> لوحة التحكم</button>
+    <button class="sbtn" id="nav-cal" onclick="switchView('cal')"><span class="si">📆</span> التقويم الشهري</button>
+    <button class="sbtn" id="nav-week" onclick="switchView('week')"><span class="si">📅</span> جدول الأسبوع</button>
+    <button class="sbtn" id="nav-list" onclick="switchView('list')"><span class="si">📋</span> قائمة الجلسات</button>
+    <button class="sbtn" id="nav-clients" onclick="switchView('clients')"><span class="si">👥</span> ملفات الموكلين</button>
+    <button class="sbtn" id="nav-fees" onclick="switchView('fees')"><span class="si">💰</span> الأتعاب والمدفوعات</button>
+    <button class="sbtn" id="nav-notif" onclick="switchView('notif')"><span class="si">🔔</span> الإشعارات <span class="nb" id="sb-nb">0</span></button>
+    <button class="sbtn" id="nav-archive" onclick="switchView('archive')"><span class="si">🗂</span> الأرشيف</button>
+    <button class="sbtn" id="nav-tt" onclick="switchView('tt')"><span class="si">📬</span> التبليغ والتنفيذ</button>
+    <button class="sbtn" id="nav-khubara" onclick="switchView('khubara')"><span class="si">🔬</span> ملفات الخبرة <span class="nb" id="sb-kh">0</span></button>
+    <button class="sbtn" id="nav-tpl" onclick="switchView('tpl')"><span class="si">📝</span> نماذج المقالات</button>
+  </div>
+  <div class="sb-sep"></div>
+  <div>
+    <div class="sb-lbl">تصفية المحكمة</div>
+    <button class="cf-btn active" onclick="setCF('all')" id="cf-all"><span>الكل</span><span class="cc" id="cf-all-c">0</span></button>
+    <div class="sb-sub">— ابتدائية —</div>
+    <button class="cf-btn" onclick="setCF('ibt_laracha')" id="cf-ibt_laracha"><span>العرائش</span><span class="cc" id="cf-ibt_laracha-c">0</span></button>
+    <button class="cf-btn" onclick="setCF('ibt_tanger')" id="cf-ibt_tanger"><span>طنجة</span><span class="cc" id="cf-ibt_tanger-c">0</span></button>
+    <button class="cf-btn" onclick="setCF('ibt_souk')" id="cf-ibt_souk"><span>سوق الأربعاء</span><span class="cc" id="cf-ibt_souk-c">0</span></button>
+    <button class="cf-btn" onclick="setCF('ibt_ksar')" id="cf-ibt_ksar"><span>القصر الكبير</span><span class="cc" id="cf-ibt_ksar-c">0</span></button>
+    <div class="sb-sub">— استئناف —</div>
+    <button class="cf-btn" onclick="setCF('ist_tanger')" id="cf-ist_tanger"><span>استئناف طنجة</span><span class="cc" id="cf-ist_tanger-c">0</span></button>
+    <button class="cf-btn" onclick="setCF('ist_kenitra')" id="cf-ist_kenitra"><span>استئناف القنيطرة</span><span class="cc" id="cf-ist_kenitra-c">0</span></button>
+    <div class="sb-sub">— أخرى —</div>
+    <button class="cf-btn" onclick="setCF('idari')" id="cf-idari"><span>إدارية</span><span class="cc" id="cf-idari-c">0</span></button>
+    <button class="cf-btn" onclick="setCF('tijari')" id="cf-tijari"><span>تجارية</span><span class="cc" id="cf-tijari-c">0</span></button>
+  </div>
+  <div class="sb-sep"></div>
+  <div>
+    <div class="sb-lbl">إجراءات سريعة</div>
+    <div id="lastSyncTime" style="font-size:.58rem;color:rgba(229,214,180,.35);padding:.15rem .65rem;line-height:1.4"></div>
+    <button class="sbtn" onclick="manualSync()"><span class="si">🔄</span> مزامنة الآن</button>
+    <button class="sbtn" onclick="openAddModal(null)"><span class="si">➕</span> إضافة جلسة</button>
+    <button class="sbtn" onclick="openRoleModal()"><span class="si">📋</span> جدول الأدوار</button>
+    <button class="sbtn" onclick="sortAllDays()"><span class="si">🔃</span> ترتيب الجلسات</button>
+    <button class="sbtn" onclick="exportCSV()"><span class="si">📤</span> تصدير Excel</button>
+    <button class="sbtn" onclick="openMahakim('')"><span class="si">🌐</span> بوابة mahakim.ma</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- Global Search -->
+<div class="global-search">
+  <span class="gs-icon">🔍</span>
+  <input type="text" id="globalSearch" placeholder="بحث شامل — اسم الموكل، رقم الملف، الخصم..." oninput="globalSearchFn()" onblur="setTimeout(()=>hideSearch(),200)">
+  <div class="search-results" id="searchResults"></div>
+</div>
+
+<!-- ① DASHBOARD -->
+<div class="view active" id="view-dash">
+  <div class="dash-grid" id="dashCards"></div>
+  <div class="dash-bottom">
+    <div class="chart-box">
+      <div class="chart-title">📊 الجلسات حسب المحكمة</div>
+      <div class="bar-chart" id="courtChart"></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">💰 ملخص الأتعاب</div>
+      <div id="feeSummary"></div>
+    </div>
+  </div>
+  <div class="chart-box" style="margin-bottom:1rem">
+    <div class="chart-title">📅 جلسات الأسبوع القادم</div>
+    <div id="upcomingList" style="display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem"></div>
+  </div>
+</div>
+
+<!-- ② CALENDAR -->
+<div class="view" id="view-cal">
+  <div class="cal-header">
+    <button class="wkarr" onclick="changeMonth(-1)">▶</button>
+    <div class="cal-month" id="calMonthLabel"></div>
+    <button class="wkarr" onclick="changeMonth(1)">◀</button>
+  </div>
+  <div class="cal-grid" id="calGrid"></div>
+</div>
+
+<!-- ③ WEEK -->
+<div class="view" id="view-week">
+  <div class="wgrid" id="weekGrid"></div>
+</div>
+
+<!-- ④ LIST -->
+<div class="view" id="view-list">
+  <div class="sec-title">📋 قائمة جميع الجلسات</div>
+  <div class="tbl-filters">
+    <input class="tfi" type="text" id="srch" placeholder="🔍 بحث..." oninput="renderList()">
+    <select class="tfi" id="fltr-court" onchange="renderList()">
+      <option value="">كل المحاكم</option>
+      <option value="ibt_laracha">ابتدائية العرائش</option>
+      <option value="ibt_tanger">ابتدائية طنجة</option>
+      <option value="ibt_souk">ابتدائية سوق الأربعاء</option>
+      <option value="ibt_ksar">ابتدائية القصر الكبير</option>
+      <option value="ist_tanger">استئناف طنجة</option>
+      <option value="ist_kenitra">استئناف القنيطرة</option>
+      <option value="idari">إدارية</option>
+      <option value="tijari">تجارية</option>
+    </select>
+    <select class="tfi" id="fltr-type" onchange="renderList()">
+      <option value="">كل الأنواع</option>
+      <option value="civil">مدنية</option><option value="commercial">تجارية</option>
+      <option value="administrative">إدارية</option><option value="family">أسرية</option>
+      <option value="real-estate">عقارية</option><option value="criminal">جنائية</option>
+      <option value="labor">شغلية</option>
+    </select>
+    <select class="tfi" id="fltr-status" onchange="renderList()">
+      <option value="">كل الحالات</option>
+      <option value="pending">قادمة</option><option value="done">منتهية</option>
+      <option value="postponed">مؤجلة</option><option value="urgent">عاجلة</option>
+      <option value="tabligh">تبليغ</option><option value="tanfidh">تنفيذ</option>
+    </select>
+  </div>
+  <table class="sessions-tbl">
+    <thead><tr>
+      <th>الموكل</th><th>رقم الملف</th><th>المحكمة</th><th>القاعة</th>
+      <th>نوع القضية</th><th>التاريخ</th><th>الساعة</th><th>جلسة قادمة</th><th>الحالة</th>
+    </tr></thead>
+    <tbody id="listBody"></tbody>
+  </table>
+</div>
+
+<!-- ⑤ CLIENTS -->
+<div class="view" id="view-clients">
+  <div class="sec-title">👥 ملفات الموكلين</div>
+  <div class="tbl-filters">
+    <input class="tfi" type="text" id="cl-srch" placeholder="🔍 بحث بالاسم..." oninput="renderClients()">
+  </div>
+  <div class="clients-grid" id="clientsGrid"></div>
+</div>
+
+<!-- ⑥ FEES -->
+<div class="view" id="view-fees">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+    <div class="sec-title" style="margin-bottom:0">💰 الأتعاب والمدفوعات</div>
+    <button class="btn btn-gold" onclick="openFeeModal(null)">➕ إضافة سجل أتعاب</button>
+  </div>
+  <div style="display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap">
+    <div class="chart-box" style="flex:1;min-width:180px">
+      <div style="font-size:.7rem;color:var(--muted)">إجمالي الأتعاب المتفق عليها</div>
+      <div style="font-size:1.5rem;font-weight:900;color:var(--navy)" id="fee-total">0 درهم</div>
+    </div>
+    <div class="chart-box" style="flex:1;min-width:180px">
+      <div style="font-size:.7rem;color:var(--muted)">المبالغ المحصّلة</div>
+      <div style="font-size:1.5rem;font-weight:900;color:var(--green)" id="fee-paid">0 درهم</div>
+    </div>
+    <div class="chart-box" style="flex:1;min-width:180px">
+      <div style="font-size:.7rem;color:var(--muted)">المبالغ المتبقية</div>
+      <div style="font-size:1.5rem;font-weight:900;color:var(--red)" id="fee-remaining">0 درهم</div>
+    </div>
+  </div>
+  <div class="fees-grid" id="feesGrid"></div>
+</div>
+
+<!-- ⑦ NOTIFICATIONS -->
+<div class="view" id="view-notif">
+  <div class="sec-title">🔔 الإشعارات والتنبيهات</div>
+  <div class="notif-list" id="notifList"></div>
+</div>
+
+<!-- ⑧ ARCHIVE -->
+<div class="view" id="view-archive">
+  <div class="sec-title">🗂 الأرشيف الإلكتروني</div>
+  <div class="portal-bar">
+    <div><div style="font-size:.82rem;font-weight:700;color:var(--navy)">بوابات رقمية</div><div style="font-size:.68rem;color:var(--muted);margin-top:1px">الوصول المباشر للمنظومات القضائية</div></div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <a href="https://www.mahakim.ma/#/suivi/dossier-suivi" target="_blank" class="portal-btn green">🌐 mahakim.ma</a>
+      <a href="https://www.justice.gov.ma" target="_blank" class="portal-btn blue">⚖️ وزارة العدل</a>
+      <a href="https://casablanca.juridiction.ma" target="_blank" class="portal-btn blue">📂 البوابة القضائية</a>
+    </div>
+  </div>
+  <div class="archive-tabs">
+    <button class="atab active" onclick="setATab('all')">الكل</button>
+    <button class="atab" onclick="setATab('done')">منتهية</button>
+    <button class="atab" onclick="setATab('court')">حسب المحكمة</button>
+    <button class="atab" onclick="setATab('type')">حسب النوع</button>
+    <button class="atab" onclick="setATab('year')">حسب السنة</button>
+  </div>
+  <div class="tbl-filters">
+    <input class="tfi" type="text" id="arc-srch" placeholder="🔍 بحث في الأرشيف..." oninput="renderArchive()">
+    <select class="tfi" id="arc-year" onchange="renderArchive()"><option value="">كل السنوات</option></select>
+  </div>
+  <div class="archive-grid" id="archiveGrid"></div>
+</div>
+
+<!-- ⑨ TT -->
+<div class="view" id="view-tt">
+  <div class="sec-title">📬 ملفات التبليغ والتنفيذ</div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+    <div class="tt-tabs">
+      <button class="ttab act-t" id="tttab-t" onclick="setTTTab('tabligh')">📨 التبليغ</button>
+      <button class="ttab" id="tttab-e" onclick="setTTTab('tanfidh')">⚡ التنفيذ</button>
+    </div>
+    <button class="btn btn-teal" onclick="openAddTTModal()">➕ إضافة ملف</button>
+  </div>
+  <div class="tt-grid" id="ttGrid"></div>
+</div>
+
+<!-- ⑩ KHUBARA -->
+<div class="view" id="view-khubara">
+  <div class="sec-title">🔬 ملفات الخبرة القضائية</div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+    <div class="tt-tabs">
+      <button class="ttab act-k" id="khtab-a" onclick="setKhTab('active')">🔬 جارية</button>
+      <button class="ttab" id="khtab-d" onclick="setKhTab('done')">✅ منتهية</button>
+    </div>
+    <button class="btn btn-purple" onclick="openAddKhModal()">➕ إضافة ملف خبرة</button>
+  </div>
+  <div class="tt-grid" id="khubaraGrid"></div>
+</div>
+
+<!-- ⑪ TEMPLATES -->
+<div class="view" id="view-tpl">
+  <div class="sec-title">📝 نماذج المقالات الافتتاحية</div>
+  <div class="portal-bar">
+    <div><div style="font-size:.85rem;font-weight:700;color:var(--navy)">نماذج Word جاهزة للتعديل والطباعة</div><div style="font-size:.7rem;color:var(--muted);margin-top:2px">اضغط تنزيل — افتح بـ Word — عدّل البيانات</div></div>
+    <button class="btn btn-gold" onclick="showToast('قريباً — بوابة النماذج الإلكترونية')">🌐 بوابة النماذج</button>
+  </div>
+  <div class="tpl-grid" id="tplGrid"></div>
+</div>
+
+</main>
+</div><!-- end .app -->
+
+<!-- ══ ADD/EDIT SESSION MODAL ══ -->
+<div class="overlay" id="addOverlay">
+<div class="modal wide">
+  <div class="mhdr"><div class="mtitle" id="addTitle">➕ إضافة جلسة</div><button class="mx" onclick="closeOv('addOverlay')">✕</button></div>
+  <div class="mbody">
+    <div class="fsec"><div class="fsec-t">📁 الموكل والملف</div>
+      <div class="frow"><div class="fg"><label>اسم الموكل *</label><input id="f_client" placeholder="الاسم الكامل"></div><div class="fg"><label>رقم الملف *</label><input id="f_filenum" placeholder="1245/25"></div></div>
+      <div class="frow"><div class="fg"><label>الطرف المقابل</label><input id="f_opponent" placeholder="المدعى عليه / المدعي"></div><div class="fg"><label>الجهة الممثلة</label><select id="f_side"><option value="plaintiff">مدعي / طالب</option><option value="defendant">مدعى عليه</option><option value="appelant">مستأنف</option><option value="respondent">مستأنف عليه</option><option value="intervening">متدخل</option></select></div></div>
+    </div>
+    <div class="fsec"><div class="fsec-t">🏛 المحكمة والجلسة</div>
+      <div class="frow c3">
+        <div class="fg"><label>درجة المحكمة *</label><select id="f_court_type">
+          <optgroup label="المحاكم الابتدائية">
+            <option value="ibt_laracha">الابتدائية بالعرائش</option>
+            <option value="ibt_tanger">الابتدائية بطنجة</option>
+            <option value="ibt_souk">الابتدائية بسوق الأربعاء الغرب</option>
+            <option value="ibt_ksar">الابتدائية بالقصر الكبير</option>
+            <option value="ibtidaiya">ابتدائية أخرى</option>
+          </optgroup>
+          <optgroup label="محاكم الاستئناف">
+            <option value="ist_tanger">استئناف طنجة</option>
+            <option value="ist_kenitra">استئناف القنيطرة</option>
+            <option value="istinaf">استئناف أخرى</option>
+          </optgroup>
+          <optgroup label="متخصصة">
+            <option value="idari">إدارية</option>
+            <option value="tijari">تجارية</option>
+            <option value="idaritijari">استئناف تجاري / إداري</option>
+          </optgroup>
+        </select></div>
+        <div class="fg"><label>اسم المحكمة</label><input id="f_court_name" placeholder="ابتدائية طنجة"></div>
+        <div class="fg"><label>القاعة</label><input id="f_room" placeholder="قاعة 3"></div>
+      </div>
+      <div class="frow c3">
+        <div class="fg"><label>تاريخ الجلسة *</label><input type="date" id="f_date"></div>
+        <div class="fg"><label>الساعة</label><input type="time" id="f_time"></div>
+        <div class="fg"><label>الحالة</label><select id="f_status"><option value="pending">قادمة</option><option value="done">منتهية</option><option value="postponed">مؤجلة</option><option value="urgent">عاجلة ⚠️</option><option value="tabligh">تبليغ 📨</option><option value="tanfidh">تنفيذ ⚡</option></select></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>القاضي / الهيئة</label><input id="f_judge" placeholder="اختياري"></div>
+        <div class="fg"><label>تاريخ الجلسة القادمة</label><input type="date" id="f_next_hearing"></div>
+      </div>
+    </div>
+    <div class="fsec"><div class="fsec-t">⚖️ نوع القضية والإجراء</div>
+      <div class="frow c3">
+        <div class="fg"><label>نوع القضية *</label><select id="f_type"><option value="">-- اختر --</option><option value="civil">مدنية</option><option value="commercial">تجارية</option><option value="administrative">إدارية</option><option value="family">أسرية</option><option value="real-estate">عقارية / تحفيظ</option><option value="criminal">جنائية</option><option value="labor">شغلية</option></select></div>
+        <div class="fg"><label>طبيعة الإجراء</label><select id="f_procedure"><option value="">-- اختر --</option><option value="ijraat">إجراءات</option><option value="hujaj">تقديم حجج</option><option value="talfiq">تلفيق</option><option value="hukm">إصدار حكم</option><option value="istinaf_proc">استئناف</option><option value="tanfidh_proc">تنفيذ</option><option value="tahfiz">تحفيظ عقاري</option><option value="itirad">اعتراض</option><option value="khubara">خبرة</option><option value="niyaba">مطالعة النيابة</option><option value="tabligh_proc">تبليغ</option><option value="tadlil">تذليل صعوبة</option></select></div>
+        <div class="fg"><label>الدرجة</label><select id="f_degree"><option value="1">الدرجة الأولى — ابتدائية</option><option value="2">الدرجة الثانية — استئنافية</option><option value="cassation">النقض</option></select></div>
+      </div>
+    </div>
+    <div class="fsec"><div class="fsec-t">📝 الملاحظات والأتعاب</div>
+      <div class="frow c1"><div class="fg"><label>الملاحظات</label><textarea id="f_notes" placeholder="تفاصيل الجلسة، مواقف الأطراف..."></textarea></div></div>
+      <div class="frow">
+        <div class="fg"><label>الوثائق المطلوبة</label><input id="f_docs" placeholder="عقد البيع، رسم الملكية..."></div>
+        <div class="fg"><label>قيمة الإجراء / المبلغ</label><input id="f_amount" placeholder="150,000 درهم"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>💰 الأتعاب المتفق عليها</label><input id="f_fees_agreed" placeholder="5,000 درهم"></div>
+        <div class="fg"><label>المبلغ المدفوع</label><input id="f_fees_paid" placeholder="0 درهم"></div>
+      </div>
+    </div>
+  </div>
+  <div class="mftr">
+    <button class="btn btn-gold" onclick="saveSession()">💾 حفظ</button>
+    <button class="btn btn-out" onclick="closeOv('addOverlay')">إلغاء</button>
+    <button class="btn btn-red" id="delBtn" onclick="deleteSession()" style="display:none">🗑 حذف</button>
+  </div>
+</div>
+</div>
+
+<!-- ══ DETAIL MODAL ══ -->
+<div class="overlay" id="detailOverlay">
+<div class="modal wide">
+  <div class="mhdr"><div class="mtitle">📁 تفاصيل الجلسة</div><button class="mx" onclick="closeOv('detailOverlay')">✕</button></div>
+  <div class="mbody" id="detailBody"></div>
+  <div class="mftr">
+    <button class="btn btn-navy" onclick="editFromDetail()">✏️ تعديل</button>
+    <button class="btn btn-out" onclick="closeOv('detailOverlay')">إغلاق</button>
+  </div>
+</div>
+</div>
+
+<!-- ══ CLIENT DETAIL MODAL ══ -->
+<div class="overlay" id="clientOverlay">
+<div class="modal wide">
+  <div class="mhdr"><div class="mtitle" id="clientModalTitle">👤 ملف الموكل</div><button class="mx" onclick="closeOv('clientOverlay')">✕</button></div>
+  <div class="mbody" id="clientBody"></div>
+  <div class="mftr"><button class="btn btn-out" onclick="closeOv('clientOverlay')">إغلاق</button></div>
+</div>
+</div>
+
+<!-- ══ FEE MODAL ══ -->
+<div class="overlay" id="feeOverlay">
+<div class="modal narrow">
+  <div class="mhdr"><div class="mtitle" id="feeTitle">💰 سجل أتعاب</div><button class="mx" onclick="closeOv('feeOverlay')">✕</button></div>
+  <div class="mbody">
+    <div class="fsec"><div class="fsec-t">بيانات الملف</div>
+      <div class="frow c1"><div class="fg"><label>اسم الموكل *</label><input id="fee_client" placeholder="الاسم الكامل"></div></div>
+      <div class="frow"><div class="fg"><label>رقم الملف</label><input id="fee_filenum" placeholder="1245/25"></div><div class="fg"><label>نوع القضية</label><select id="fee_type"><option value="civil">مدنية</option><option value="commercial">تجارية</option><option value="administrative">إدارية</option><option value="family">أسرية</option><option value="real-estate">عقارية</option><option value="criminal">جنائية</option><option value="labor">شغلية</option></select></div></div>
+    </div>
+    <div class="fsec"><div class="fsec-t">الأتعاب</div>
+      <div class="frow"><div class="fg"><label>المبلغ المتفق عليه *</label><input id="fee_agreed" placeholder="10,000 درهم"></div><div class="fg"><label>المبلغ المدفوع</label><input id="fee_paid" placeholder="0 درهم"></div></div>
+      <div class="frow"><div class="fg"><label>تاريخ الاستحقاق</label><input type="date" id="fee_due"></div><div class="fg"><label>الحالة</label><select id="fee_status"><option value="pending">لم يُسدَّد</option><option value="partial">مسدد جزئياً</option><option value="paid">مسدد كاملاً</option><option value="overdue">متأخر</option></select></div></div>
+      <div class="frow c1"><div class="fg"><label>ملاحظات</label><textarea id="fee_notes" placeholder="تفاصيل الاتفاق..."></textarea></div></div>
+    </div>
+  </div>
+  <div class="mftr">
+    <button class="btn btn-gold" onclick="saveFee()">💾 حفظ</button>
+    <button class="btn btn-out" onclick="closeOv('feeOverlay')">إلغاء</button>
+    <button class="btn btn-red" id="feeDelBtn" onclick="deleteFee()" style="display:none">🗑 حذف</button>
+  </div>
+</div>
+</div>
+
+<!-- ══ TT MODAL ══ -->
+<div class="overlay" id="ttOverlay">
+<div class="modal narrow">
+  <div class="mhdr"><div class="mtitle" id="ttTitle">➕ ملف تبليغ / تنفيذ</div><button class="mx" onclick="closeOv('ttOverlay')">✕</button></div>
+  <div class="mbody">
+    <div class="frow c1"><div class="fg"><label>اسم الموكل *</label><input id="tt_client" placeholder="الاسم الكامل"></div></div>
+    <div class="frow"><div class="fg"><label>رقم الملف *</label><input id="tt_filenum" placeholder="1245/25"></div><div class="fg"><label>نوع الإجراء</label><select id="tt_type"><option value="tabligh">تبليغ 📨</option><option value="tanfidh">تنفيذ ⚡</option></select></div></div>
+    <div class="frow"><div class="fg"><label>المحكمة</label><select id="tt_court"><option value="ibt_laracha">ابتدائية العرائش</option><option value="ibt_tanger">ابتدائية طنجة</option><option value="ibt_souk">ابتدائية سوق الأربعاء</option><option value="ibt_ksar">ابتدائية القصر الكبير</option><option value="ist_tanger">استئناف طنجة</option><option value="ist_kenitra">استئناف القنيطرة</option></select></div><div class="fg"><label>تاريخ الإجراء</label><input type="date" id="tt_date"></div></div>
+    <div class="frow"><div class="fg"><label>الطرف المقابل</label><input id="tt_opponent" placeholder="اختياري"></div><div class="fg"><label>التقدم</label><select id="tt_stage"><option value="0">0% — لم يبدأ</option><option value="25">25% — قيد الإجراء</option><option value="50">50% — نصف المسار</option><option value="75">75% — متقدم</option><option value="100">100% — منجز</option></select></div></div>
+    <div class="frow c1"><div class="fg"><label>ملاحظات</label><textarea id="tt_notes"></textarea></div></div>
+  </div>
+  <div class="mftr"><button class="btn btn-teal" onclick="saveTT()">💾 حفظ</button><button class="btn btn-out" onclick="closeOv('ttOverlay')">إلغاء</button><button class="btn btn-red" id="ttDelBtn" onclick="deleteTT()" style="display:none">🗑 حذف</button></div>
+</div>
+</div>
+
+<!-- ══ KHUBARA MODAL ══ -->
+<div class="overlay" id="khOverlay">
+<div class="modal wide">
+  <div class="mhdr"><div class="mtitle" id="khTitle">🔬 ملف خبرة قضائية</div><button class="mx" onclick="closeOv('khOverlay')">✕</button></div>
+  <div class="mbody">
+    <div class="fsec"><div class="fsec-t">📁 بيانات الموكل</div>
+      <div class="frow"><div class="fg"><label>اسم الموكل *</label><input id="kh_client"></div><div class="fg"><label>رقم الملف *</label><input id="kh_filenum" placeholder="1245/25"></div></div>
+      <div class="frow"><div class="fg"><label>المحكمة</label><select id="kh_court"><option value="ibt_laracha">ابتدائية العرائش</option><option value="ibt_tanger">ابتدائية طنجة</option><option value="ibt_souk">ابتدائية سوق الأربعاء</option><option value="ibt_ksar">ابتدائية القصر الكبير</option><option value="ist_tanger">استئناف طنجة</option><option value="ist_kenitra">استئناف القنيطرة</option><option value="idari">إدارية</option><option value="tijari">تجارية</option></select></div><div class="fg"><label>نوع القضية</label><select id="kh_type"><option value="civil">مدنية</option><option value="commercial">تجارية</option><option value="administrative">إدارية</option><option value="family">أسرية</option><option value="real-estate">عقارية</option><option value="labor">شغلية</option></select></div></div>
+      <div class="frow"><div class="fg"><label>الطرف المقابل</label><input id="kh_opponent"></div><div class="fg"><label>القاضي المُعيِّن</label><input id="kh_judge"></div></div>
+    </div>
+    <div class="fsec"><div class="fsec-t">🔬 الخبير والآجال</div>
+      <div class="frow"><div class="fg"><label>اسم الخبير *</label><input id="kh_expert_name" placeholder="الاسم الكامل"></div><div class="fg"><label>تخصص الخبير</label><input id="kh_expert_specialty" placeholder="خبير عقاري / محاسبي..."></div></div>
+      <div class="frow c3"><div class="fg"><label>📅 تاريخ التعيين</label><input type="date" id="kh_appoint_date"></div><div class="fg"><label>⏰ آخر أجل للخبرة</label><input type="date" id="kh_deadline"></div><div class="fg"><label>📋 آخر أجل للمستنتجات</label><input type="date" id="kh_report_deadline"></div></div>
+    </div>
+    <div class="fsec"><div class="fsec-t">💰 مصاريف الخبرة</div>
+      <div class="frow c3"><div class="fg"><label>مبلغ الاحتياطي</label><input id="kh_provision" placeholder="5,000 درهم"></div><div class="fg"><label>المبلغ المُؤدَّى</label><input id="kh_paid" placeholder="0 درهم"></div><div class="fg"><label>حالة الأداء</label><select id="kh_payment_status"><option value="pending">لم يُؤدَّ</option><option value="partial">جزئي</option><option value="done">كامل</option><option value="waived">معفى</option></select></div></div>
+      <div class="frow"><div class="fg"><label>الملزَم بالأداء</label><select id="kh_payer"><option value="plaintiff">المدعي</option><option value="defendant">المدعى عليه</option><option value="both">الطرفان</option><option value="court">المحكمة</option></select></div><div class="fg"><label>تاريخ الأداء</label><input type="date" id="kh_payment_date"></div></div>
+    </div>
+    <div class="fsec"><div class="fsec-t">📊 المرحلة والحالة</div>
+      <div class="frow"><div class="fg"><label>مرحلة الخبرة</label><select id="kh_stage"><option value="appointed">تعيين الخبير</option><option value="provision">انتظار الاحتياطي</option><option value="ongoing">الخبرة جارية</option><option value="site_visit">معاينة الموضوع</option><option value="draft">مشروع التقرير</option><option value="submitted">إيداع التقرير</option><option value="done">منتهية</option></select></div><div class="fg"><label>الحالة العامة</label><select id="kh_status"><option value="active">جارية</option><option value="delayed">متأخرة</option><option value="done">منتهية</option></select></div></div>
+      <div class="frow c1"><div class="fg"><label>ملاحظات</label><textarea id="kh_notes" placeholder="تفاصيل الخبرة، مواقف الأطراف..."></textarea></div></div>
+    </div>
+  </div>
+  <div class="mftr"><button class="btn btn-purple" onclick="saveKh()">💾 حفظ</button><button class="btn btn-out" onclick="closeOv('khOverlay')">إلغاء</button><button class="btn btn-red" id="khDelBtn" onclick="deleteKh()" style="display:none">🗑 حذف</button></div>
+</div>
+</div>
+
+<!-- ══ ROLE MODAL ══ -->
+<div class="overlay" id="roleOverlay">
+<div class="modal" style="width:860px;max-width:97vw;">
+  <div class="mhdr">
+    <div class="mtitle">📋 جدول الأدوار الأسبوعي</div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <button class="btn btn-gold" style="font-size:.74rem;padding:.35rem .8rem" onclick="printRole()">🖨 طباعة</button>
+      <button class="mx" onclick="closeOv('roleOverlay')">✕</button>
+    </div>
+  </div>
+  <div class="mbody" id="roleBody" style="padding:.9rem 1rem"></div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  FIREBASE
+// ══════════════════════════════════════════════════════
+firebase.initializeApp({
+  apiKey:"AIzaSyDjvzSVOMFo2gJcDjRoOlHLrpzu3anE8J8",
+  authDomain:"bensissi-office.firebaseapp.com",
+  projectId:"bensissi-office",
+  storageBucket:"bensissi-office.firebasestorage.app",
+  messagingSenderId:"418288341609",
+  appId:"1:418288341609:web:54c4fcdf28eec4e87048f8"
+});
+const db = firebase.firestore();
+
+// ══════════════════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════════════════
+let sessions     = JSON.parse(localStorage.getItem('bs4_s')  || '[]');
+let ttFiles      = JSON.parse(localStorage.getItem('bs4_tt') || '[]');
+let khubaraFiles = JSON.parse(localStorage.getItem('bs4_kh') || '[]');
+let feeRecords   = JSON.parse(localStorage.getItem('bs4_fe') || '[]');
+
+// State
+let weekOffset=0, calOffset=0, courtFilter='all', archiveTab='all';
+let ttTab='tabligh', khTab='active';
+let editingId=null, detailId=null, editingTTId=null, editingKhId=null, editingFeeId=null;
+
+function persist(){
+  localStorage.setItem('bs4_s',  JSON.stringify(sessions));
+  localStorage.setItem('bs4_tt', JSON.stringify(ttFiles));
+  localStorage.setItem('bs4_kh', JSON.stringify(khubaraFiles));
+  localStorage.setItem('bs4_fe', JSON.stringify(feeRecords));
+  syncToFirestore();
+}
+
+// ══════════════════════════════════════════════════════
+//  SYNC
+// ══════════════════════════════════════════════════════
+function setSS(state){
+  const el=document.getElementById('syncStatus'); if(!el) return;
+  const m={syncing:'🔄 جارٍ الحفظ...',ok:'☁️ محفوظ',offline:'📴 غير متصل',error:'⚠️ خطأ'};
+  const c={syncing:'#c9a84c',ok:'#16a34a',offline:'#6b7280',error:'#b91c1c'};
+  el.innerHTML=`<span style="color:${c[state]||c.ok}">${m[state]||m.ok}</span>`;
+}
+
+let _stimer=null;
+function syncToFirestore(){
+  setSS('syncing');
+  clearTimeout(_stimer);
+  _stimer=setTimeout(async()=>{
+    try{
+      await db.collection('office4').doc('data').set({
+        sessions,ttFiles,khubaraFiles,feeRecords,
+        updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+      });
+      setSS('ok');
+      localStorage.setItem('bs4_ls',new Date().toISOString());
+      updateLastSyncDisplay();
+    }catch(e){ console.error(e); setSS('error'); }
+  },800);
+}
+
+async function loadFromFirestore(){
+  setSS('syncing');
+  try{
+    const doc=await db.collection('office4').doc('data').get();
+    if(doc.exists){
+      const d=doc.data();
+      if(d.sessions)     sessions     = d.sessions;
+      if(d.ttFiles)      ttFiles      = d.ttFiles;
+      if(d.khubaraFiles) khubaraFiles = d.khubaraFiles;
+      if(d.feeRecords)   feeRecords   = d.feeRecords;
+      localStorage.setItem('bs4_s',  JSON.stringify(sessions));
+      localStorage.setItem('bs4_tt', JSON.stringify(ttFiles));
+      localStorage.setItem('bs4_kh', JSON.stringify(khubaraFiles));
+      localStorage.setItem('bs4_fe', JSON.stringify(feeRecords));
+      setSS('ok'); return true;
+    }
+    setSS('ok'); return false;
+  }catch(e){ console.warn(e); setSS('offline'); return false; }
+}
+
+function startRealtimeSync(){
+  db.collection('office4').doc('data').onSnapshot(doc=>{
+    if(!doc.exists) return;
+    const d=doc.data();
+    const ls=localStorage.getItem('bs4_ls');
+    const st=d.updatedAt?d.updatedAt.toDate().toISOString():null;
+    if(st&&ls&&st<=ls) return;
+    let changed=false;
+    if(d.sessions     && JSON.stringify(d.sessions)    !==JSON.stringify(sessions))    { sessions=d.sessions;         changed=true; }
+    if(d.ttFiles      && JSON.stringify(d.ttFiles)     !==JSON.stringify(ttFiles))     { ttFiles=d.ttFiles;           changed=true; }
+    if(d.khubaraFiles && JSON.stringify(d.khubaraFiles)!==JSON.stringify(khubaraFiles)){ khubaraFiles=d.khubaraFiles; changed=true; }
+    if(d.feeRecords   && JSON.stringify(d.feeRecords)  !==JSON.stringify(feeRecords))  { feeRecords=d.feeRecords;     changed=true; }
+    if(changed){
+      localStorage.setItem('bs4_s',  JSON.stringify(sessions));
+      localStorage.setItem('bs4_tt', JSON.stringify(ttFiles));
+      localStorage.setItem('bs4_kh', JSON.stringify(khubaraFiles));
+      localStorage.setItem('bs4_fe', JSON.stringify(feeRecords));
+      renderWeek(); renderList(); updateBadges();
+      showToast('🔄 تم التحديث من حاسوب آخر');
+    }
+  },err=>{ console.warn(err); setSS('offline'); });
+}
+
+async function manualSync(){
+  setSS('syncing'); showToast('🔄 جارٍ المزامنة...');
+  const ok=await loadFromFirestore();
+  if(ok){ renderAll(); showToast('☁️ تمت المزامنة'); }
+  else showToast('⚠️ تحقق من الإنترنت');
+}
+
+function updateLastSyncDisplay(){
+  const el=document.getElementById('lastSyncTime'); if(!el) return;
+  const ls=localStorage.getItem('bs4_ls'); if(!ls){ el.textContent=''; return; }
+  const d=Math.round((new Date()-new Date(ls))/60000);
+  el.textContent=`☁️ ${d<1?'منذ ثوانٍ':d<60?`منذ ${d} دقيقة`:`منذ ${Math.round(d/60)} ساعة`}`;
+}
+setInterval(updateLastSyncDisplay,60000);
+
+// ══════════════════════════════════════════════════════
+//  LOGIN
+// ══════════════════════════════════════════════════════
+const PWD = '19982501';
+function checkPwd(){
+  const v=document.getElementById('pwdInput').value;
+  if(v===PWD){ document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('appHeader').style.display=''; document.getElementById('appBody').style.display=''; initApp(); }
+  else{ const e=document.getElementById('pwdErr'); e.style.display='block'; setTimeout(()=>e.style.display='none',2000); document.getElementById('pwdInput').value=''; }
+}
+document.addEventListener('keydown',e=>{ if(document.getElementById('loginScreen').classList.contains('hidden')) return; if(e.key==='Enter') checkPwd(); });
+
+// ══════════════════════════════════════════════════════
+//  CONSTANTS
+// ══════════════════════════════════════════════════════
+const DAYS=['الاثنين','الثلاثاء','الأربعاء','الخميس'];
+const MA=['يناير','فبراير','مارس','أبريل','ماي','يونيو','يوليوز','غشت','شتنبر','أكتوبر','نونبر','دجنبر'];
+const DAY_NAMES_AR=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+
+const CM={
+  ibt_laracha:{label:'ابتدائية العرائش',  color:'#1a56c4',bg:'#dbeafe'},
+  ibt_tanger: {label:'ابتدائية طنجة',     color:'#1d4ed8',bg:'#eff6ff'},
+  ibt_souk:   {label:'ابتدائية سوق الأربعاء',color:'#1e40af',bg:'#e0ecff'},
+  ibt_ksar:   {label:'ابتدائية القصر الكبير',color:'#1d4ed8',bg:'#dbeafe'},
+  ibtidaiya:  {label:'ابتدائية أخرى',     color:'#1d4ed8',bg:'#eff6ff'},
+  ist_tanger: {label:'استئناف طنجة',      color:'#6d28d9',bg:'#f5f3ff'},
+  ist_kenitra:{label:'استئناف القنيطرة',  color:'#7c3aed',bg:'#ede9fe'},
+  istinaf:    {label:'استئناف أخرى',      color:'#6d28d9',bg:'#f5f3ff'},
+  idari:      {label:'إدارية',            color:'#0f766e',bg:'#f0fdfa'},
+  tijari:     {label:'تجارية',            color:'#c2410c',bg:'#fff7ed'},
+  idaritijari:{label:'استئناف تجاري',     color:'#b45309',bg:'#fffbeb'},
+};
+const CO=['ibt_laracha','ibt_tanger','ibt_souk','ibt_ksar','ibtidaiya','ist_tanger','ist_kenitra','istinaf','idari','tijari','idaritijari'];
+const TL={civil:'مدنية',commercial:'تجارية',administrative:'إدارية',family:'أسرية','real-estate':'عقارية',criminal:'جنائية',labor:'شغلية'};
+const PL={ijraat:'إجراءات',hujaj:'تقديم حجج',talfiq:'تلفيق',hukm:'إصدار حكم',istinaf_proc:'استئناف',tanfidh_proc:'تنفيذ',tahfiz:'تحفيظ عقاري',itirad:'اعتراض',khubara:'خبرة',niyaba:'مطالعة النيابة',tabligh_proc:'تبليغ',tadlil:'تذليل صعوبة'};
+const SL={plaintiff:'مدعي',defendant:'مدعى عليه',appelant:'مستأنف',respondent:'مستأنف عليه',intervening:'متدخل'};
+const STL={pending:'قادمة',done:'منتهية',postponed:'مؤجلة',urgent:'عاجلة',tabligh:'تبليغ',tanfidh:'تنفيذ'};
+const ROLE_COURTS=[
+  {key:'ibt_laracha',label:'المحكمة الابتدائية بالعرائش'},
+  {key:'ibt_tanger', label:'المحكمة الابتدائية بطنجة'},
+  {key:'ibt_souk',   label:'المحكمة الابتدائية بسوق الأربعاء الغرب'},
+  {key:'ibt_ksar',   label:'المحكمة الابتدائية بالقصر الكبير'},
+  {key:'ist_tanger', label:'محكمة الاستئناف بطنجة'},
+  {key:'ist_kenitra',label:'محكمة الاستئناف بالقنيطرة'},
+  {key:'idari',      label:'المحكمة الإدارية'},
+  {key:'tijari',     label:'المحكمة التجارية'},
+];
+
+// ══════════════════════════════════════════════════════
+//  DATE UTILS
+// ══════════════════════════════════════════════════════
+function getMon(off=0){const n=new Date(),d=n.getDay(),diff=d===0?-6:1-d,m=new Date(n);m.setDate(n.getDate()+diff+off*7);m.setHours(0,0,0,0);return m;}
+function getWD(off=0){const m=getMon(off);return[0,1,2,3].map(i=>{const d=new Date(m);d.setDate(m.getDate()+i);return d;});}
+function iso(d){return d.toISOString().split('T')[0];}
+function fmt(d){return`${d.getDate()} ${MA[d.getMonth()]}`;}
+function fmtF(s){if(!s)return'—';const[y,m,d]=s.split('-');return`${+d} ${MA[+m-1]} ${y}`;}
+function isToday(d){const n=new Date();return d.getDate()===n.getDate()&&d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();}
+function dayDiff(iso_str){if(!iso_str)return null;const d=new Date(iso_str+'T00:00:00'),n=new Date();n.setHours(0,0,0,0);return Math.round((d-n)/86400000);}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+
+// ══════════════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════════════
+function renderDash(){
+  const now=new Date(); now.setHours(0,0,0,0);
+  const wISOs=getWD(0).map(iso);
+  const wSess=sessions.filter(s=>wISOs.includes(s.date));
+  const pending=sessions.filter(s=>s.status==='pending'||s.status==='urgent');
+  const overdue=sessions.filter(s=>{const d=dayDiff(s.date);return d!==null&&d<0&&s.status!=='done'&&s.status!=='postponed';});
+  const totalFeeAgreed=feeRecords.reduce((a,f)=>a+parseNum(f.fee_agreed),0);
+  const totalFeePaid=feeRecords.reduce((a,f)=>a+parseNum(f.fee_paid),0);
+
+  const cards=[
+    {num:sessions.length,label:'إجمالي الملفات',icon:'📁',color:'#c9a84c',view:'list'},
+    {num:wSess.length,label:'جلسات هذا الأسبوع',icon:'📅',color:'#1d4ed8',view:'week'},
+    {num:pending.length,label:'جلسات قادمة',icon:'⏰',color:'#c2410c',view:'list'},
+    {num:overdue.length,label:'ملفات متأخرة',icon:'🚨',color:'#b91c1c',view:'notif'},
+    {num:khubaraFiles.filter(k=>k.kh_status!=='done').length,label:'خبرات جارية',icon:'🔬',color:'#6d28d9',view:'khubara'},
+    {num:ttFiles.filter(t=>t.stage!=='100').length,label:'تبليغ/تنفيذ جارٍ',icon:'📬',color:'#0f766e',view:'tt'},
+    {num:fmtNum(totalFeePaid),label:'درهم محصّل',icon:'💰',color:'#166534',view:'fees'},
+    {num:fmtNum(totalFeeAgreed-totalFeePaid),label:'درهم متبقٍّ',icon:'💸',color:totalFeeAgreed-totalFeePaid>0?'#b91c1c':'#166534',view:'fees'},
+  ];
+
+  document.getElementById('dashCards').innerHTML=cards.map(c=>`
+    <div class="dash-card" style="--dc:${c.color}" onclick="switchView('${c.view}')">
+      <div class="dash-num">${c.num}</div>
+      <div class="dash-label">${c.label}</div>
+      <div class="dash-icon">${c.icon}</div>
+    </div>`).join('');
+
+  // Court bar chart
+  const courtData=CO.map(ct=>({label:(CM[ct]||{label:ct}).label,count:sessions.filter(s=>s.court_type===ct).length,color:(CM[ct]||{color:'#c9a84c'}).color})).filter(d=>d.count>0).sort((a,b)=>b.count-a.count).slice(0,7);
+  const maxC=Math.max(...courtData.map(d=>d.count),1);
+  document.getElementById('courtChart').innerHTML=courtData.map(d=>`
+    <div class="bar-row">
+      <div class="bar-label">${d.label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${d.count/maxC*100}%;background:${d.color}"></div></div>
+      <div class="bar-val">${d.count}</div>
+    </div>`).join('');
+
+  // Fee summary
+  document.getElementById('feeSummary').innerHTML=`
+    <div class="fees-row"><span style="color:var(--muted)">إجمالي الاتفاقات</span><span style="font-weight:700">${fmtNum(totalFeeAgreed)} درهم</span></div>
+    <div class="fees-row"><span style="color:var(--green)">محصّل</span><span style="font-weight:700;color:var(--green)">${fmtNum(totalFeePaid)} درهم</span></div>
+    <div class="fees-row"><span style="color:var(--red)">متبقٍّ</span><span style="font-weight:700;color:var(--red)">${fmtNum(totalFeeAgreed-totalFeePaid)} درهم</span></div>
+    <div style="margin-top:.6rem">
+      <div class="fee-bar"><div class="fee-fill" style="width:${totalFeeAgreed?Math.min(100,totalFeePaid/totalFeeAgreed*100):0}%;background:var(--green)"></div></div>
+      <div style="font-size:.65rem;color:var(--muted);margin-top:3px">نسبة التحصيل: ${totalFeeAgreed?Math.round(totalFeePaid/totalFeeAgreed*100):0}%</div>
+    </div>`;
+
+  // Upcoming sessions
+  const upcoming=sessions.filter(s=>{const d=dayDiff(s.date);return d!==null&&d>=0&&d<=7&&s.status!=='done';}).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).slice(0,5);
+  document.getElementById('upcomingList').innerHTML=upcoming.length?upcoming.map(s=>{
+    const d=dayDiff(s.date),cm=CM[s.court_type]||CM.ibt_tanger;
+    return`<div style="display:flex;align-items:center;gap:10px;padding:.5rem .7rem;background:var(--white);border-radius:var(--r8);border:1px solid #e8e0d0;cursor:pointer" onclick="openDetail('${s.id}')">
+      <span style="background:${d===0?'var(--red)':d===1?'var(--orange)':'#ddd4b8'};color:${d<=1?'#fff':'var(--navy)'};font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:8px;white-space:nowrap">${d===0?'اليوم':d===1?'غداً':fmtF(s.date)}</span>
+      <span style="font-weight:700;font-size:.82rem;color:var(--navy);flex:1">${s.client}</span>
+      <span style="font-size:.68rem;color:${cm.color};font-weight:600">${cm.label}</span>
+      <span style="font-size:.72rem;color:var(--gold);font-weight:700">${s.time||''}</span>
+    </div>`;
+  }).join(''):`<div style="text-align:center;padding:1.5rem;color:#bbb;font-size:.8rem">لا توجد جلسات قادمة هذا الأسبوع</div>`;
+}
+
+function parseNum(s){ if(!s) return 0; return parseFloat(String(s).replace(/[^0-9.]/g,''))||0; }
+function fmtNum(n){ return Math.round(n).toLocaleString('ar-MA'); }
+
+// ══════════════════════════════════════════════════════
+//  CALENDAR
+// ══════════════════════════════════════════════════════
+function renderCal(){
+  const now=new Date();
+  const year=now.getFullYear(), month=now.getMonth()+calOffset;
+  const d=new Date(year,month,1);
+  document.getElementById('calMonthLabel').textContent=`${MA[d.getMonth()]} ${d.getFullYear()}`;
+  const grid=document.getElementById('calGrid');
+  const dayNames=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  let html=dayNames.map(n=>`<div class="cal-day-name">${n}</div>`).join('');
+  const firstDay=new Date(d.getFullYear(),d.getMonth(),1).getDay();
+  const daysInMonth=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+  const daysInPrev=new Date(d.getFullYear(),d.getMonth(),0).getDate();
+  let cells=[];
+  for(let i=firstDay-1;i>=0;i--) cells.push({day:daysInPrev-i,cur:false});
+  for(let i=1;i<=daysInMonth;i++) cells.push({day:i,cur:true});
+  while(cells.length%7!==0) cells.push({day:cells.length-daysInMonth-firstDay+1,cur:false});
+  cells.forEach(cell=>{
+    const dateStr=cell.cur?`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(cell.day).padStart(2,'0')}`:'';
+    const daySess=dateStr?sessions.filter(s=>s.date===dateStr):[];
+    const isT=cell.cur&&cell.day===now.getDate()&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+    html+=`<div class="cal-cell${isT?' today':''}${!cell.cur?' other-month':''}${daySess.length?' has-sessions':''}" onclick="${dateStr?`calDayClick('${dateStr}')`:''}" style="cursor:${dateStr?'pointer':'default'}">
+      <div class="cal-day-num">${cell.day}</div>
+      ${daySess.slice(0,2).map(s=>{const cm=CM[s.court_type]||CM.ibt_tanger;return`<div class="cal-sess-dot" style="background:${cm.color}18;color:${cm.color}">${s.time?s.time.slice(0,5)+' ':''} ${s.client.split(' ')[0]}</div>`;}).join('')}
+      ${daySess.length>2?`<div class="cal-more">+${daySess.length-2} أخرى</div>`:''}
+    </div>`;
+  });
+  grid.innerHTML=html;
+}
+function calDayClick(dateStr){
+  const daySess=sessions.filter(s=>s.date===dateStr);
+  if(daySess.length===1) openDetail(daySess[0].id);
+  else if(daySess.length>1){ switchView('week'); const d=new Date(dateStr+'T00:00:00'); const today=new Date(); today.setHours(0,0,0,0); const mon=getMon(0); const diff=Math.round((d-mon)/86400000/7); weekOffset=diff; renderWeek(); }
+  else openAddModal(dateStr);
+}
+function changeMonth(d){ calOffset+=d; renderCal(); }
+
+// ══════════════════════════════════════════════════════
+//  WEEK
+// ══════════════════════════════════════════════════════
+function renderWeek(){
+  const days=getWD(weekOffset);
+  document.getElementById('weekLabel').textContent=`${fmt(days[0])} — ${fmt(days[3])} ${days[0].getFullYear()}`;
+  const grid=document.getElementById('weekGrid'); grid.innerHTML='';
+  const wISOs=days.map(iso);
+  const wSess=sessions.filter(s=>wISOs.includes(s.date));
+  document.getElementById('sp-t').textContent=wSess.length;
+  document.getElementById('sp-p').textContent=wSess.filter(s=>s.status==='pending'||s.status==='urgent').length;
+  document.getElementById('sp-d').textContent=wSess.filter(s=>s.status==='done').length;
+  document.getElementById('sp-pp').textContent=wSess.filter(s=>s.status==='postponed').length;
+  document.getElementById('sp-tt').textContent=wSess.filter(s=>s.status==='tabligh'||s.status==='tanfidh').length;
+  // sidebar counts
+  document.getElementById('cf-all-c').textContent=sessions.length;
+  ['ibt_laracha','ibt_tanger','ibt_souk','ibt_ksar','ist_tanger','ist_kenitra','idari','tijari'].forEach(ct=>{const el=document.getElementById(`cf-${ct}-c`);if(el)el.textContent=sessions.filter(s=>s.court_type===ct).length;});
+  days.forEach((date,di)=>{
+    const dateISO=iso(date);
+    let ds=sessions.filter(s=>s.date===dateISO).filter(s=>courtFilter==='all'||s.court_type===courtFilter).sort((a,b)=>{const ai=CO.indexOf(a.court_type),bi=CO.indexOf(b.court_type);const cc=(ai<0?99:ai)-(bi<0?99:bi);return cc||((a.time||'').localeCompare(b.time||''));});
+    const col=document.createElement('div'); col.className='dcol';
+    col.innerHTML=`<div class="dchdr${isToday(date)?' today':''}"><div><div class="dcname">${DAYS[di]}</div><div class="dcdate">${fmt(date)} ${date.getFullYear()}</div></div><div class="dchdr-r"><div class="dcount">${ds.length} جلسة</div><button class="sort-btn" onclick="sortDay('${dateISO}')">🔃 ترتيب</button></div></div><div class="dcbody" id="dcb-${dateISO}"></div>`;
+    grid.appendChild(col);
+    const body=col.querySelector(`#dcb-${dateISO}`);
+    if(!ds.length){ body.innerHTML='<div class="empty-day">📭 لا توجد جلسات</div>'; }
+    else{
+      const groups={};
+      ds.forEach(s=>{const ct=s.court_type||'ibt_tanger';if(!groups[ct])groups[ct]=[];groups[ct].push(s);});
+      Object.entries(groups).forEach(([ct,list])=>{
+        const cm=CM[ct]||CM.ibt_tanger;
+        const grp=document.createElement('div'); grp.className='cgrp';
+        grp.innerHTML=`<div class="cgrp-hdr" style="background:${cm.color}15"><span class="cgrp-dot" style="background:${cm.color}"></span><span class="cgrp-name" style="color:${cm.color}">${cm.label}</span><span class="cgrp-cnt" style="background:${cm.color}20;color:${cm.color}">${list.length}</span></div>`;
+        list.forEach(s=>{
+          const isChild=!!s.parent_id;
+          const card=document.createElement('div');
+          card.className=`scard ${s.status}`;
+          card.style.setProperty('--ct',cm.color);
+          card.onclick=()=>openDetail(s.id);
+          const par=isChild?sessions.find(p=>p.id===s.parent_id):null;
+          card.innerHTML=(isChild?`<div style="font-size:.56rem;background:#fff3e0;color:#c2410c;border-radius:3px;padding:1px 5px;margin-bottom:2px;font-weight:700">⏭ من ${fmtF(par?par.date:s.date)}</div>`:'')
+            +`<div class="sc-top"><span class="sc-time">${s.time||'--:--'}</span><span class="sc-fnum">${s.filenum||'—'}</span></div><div class="sc-client">${s.client}</div><div class="sc-meta">${(CM[s.court_type]||CM.ibt_tanger).label}${s.room?' · '+s.room:''}</div><div class="sc-bot"><span class="badge type-${s.type}">${TL[s.type]||'—'}</span><span class="badge badge-${s.status}">${STL[s.status]||'—'}</span>${s.notes?'<span style="font-size:.58rem;color:var(--gold)">📌</span>':''}</div>`;
+          grp.appendChild(card);
+        });
+        body.appendChild(grp);
+      });
+    }
+    const ab=document.createElement('button'); ab.className='add-day-btn'; ab.textContent='+ إضافة جلسة'; ab.onclick=()=>openAddModal(dateISO); body.appendChild(ab);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  LIST
+// ══════════════════════════════════════════════════════
+function renderList(){
+  const q=(document.getElementById('srch').value||'').toLowerCase();
+  const fc=document.getElementById('fltr-court').value;
+  const ft=document.getElementById('fltr-type').value;
+  const fs=document.getElementById('fltr-status').value;
+  let list=sessions.filter(s=>{
+    if(q&&!s.client.toLowerCase().includes(q)&&!(s.filenum||'').toLowerCase().includes(q)&&!(s.opponent||'').toLowerCase().includes(q)) return false;
+    if(fc&&s.court_type!==fc) return false;
+    if(ft&&s.type!==ft) return false;
+    if(fs&&s.status!==fs) return false;
+    return true;
+  }).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  const tb=document.getElementById('listBody');
+  if(!list.length){tb.innerHTML='<tr><td colspan="9" style="text-align:center;padding:2rem;color:#bbb">لا توجد نتائج</td></tr>';return;}
+  tb.innerHTML=list.map(s=>{const cm=CM[s.court_type]||CM.ibt_tanger;return`<tr onclick="openDetail('${s.id}')"><td><strong>${s.client}</strong>${s.opponent?`<div style="font-size:.68rem;color:var(--muted)">ض: ${s.opponent}</div>`:''}</td><td><span style="font-family:monospace;background:var(--navy);color:var(--gold3);padding:2px 7px;border-radius:5px;font-size:.7rem">${s.filenum||'—'}</span></td><td style="font-size:.72rem;font-weight:700;color:${cm.color}">${cm.label}</td><td style="font-size:.78rem">${s.room||'—'}</td><td><span class="badge type-${s.type}">${TL[s.type]||'—'}</span></td><td style="white-space:nowrap;font-size:.78rem">${fmtF(s.date)}</td><td style="font-weight:700;color:var(--gold);font-size:.8rem">${s.time||'—'}</td><td style="font-size:.72rem;color:var(--red)">${s.next_hearing?fmtF(s.next_hearing):'—'}</td><td><span class="badge badge-${s.status}">${STL[s.status]||'—'}</span></td></tr>`;}).join('');
+}
+
+// ══════════════════════════════════════════════════════
+//  GLOBAL SEARCH
+// ══════════════════════════════════════════════════════
+function globalSearchFn(){
+  const q=(document.getElementById('globalSearch').value||'').toLowerCase().trim();
+  const res=document.getElementById('searchResults');
+  if(q.length<2){res.classList.remove('show');return;}
+  const results=[];
+  sessions.forEach(s=>{if(s.client.toLowerCase().includes(q)||(s.filenum||'').toLowerCase().includes(q)||(s.opponent||'').toLowerCase().includes(q)){results.push({type:'session',label:s.client,sub:`${s.filenum||'—'} · ${(CM[s.court_type]||CM.ibt_tanger).label} · ${fmtF(s.date)}`,id:s.id,icon:'📅'});}});
+  khubaraFiles.forEach(k=>{if(k.client.toLowerCase().includes(q)||(k.filenum||'').toLowerCase().includes(q)){results.push({type:'khubara',label:k.client,sub:`خبرة · ${k.filenum||'—'} · ${k.kh_expert_name||''}`,id:k.id,icon:'🔬'});}});
+  feeRecords.forEach(f=>{if(f.client.toLowerCase().includes(q)){results.push({type:'fee',label:f.client,sub:`أتعاب · ${f.filenum||'—'} · ${f.fee_agreed||'—'}`,id:f.id,icon:'💰'});}});
+  if(!results.length){res.innerHTML='<div class="sr-item"><div class="sr-main"><div class="sr-title" style="color:#bbb">لا توجد نتائج</div></div></div>';res.classList.add('show');return;}
+  res.innerHTML=results.slice(0,8).map(r=>`<div class="sr-item" onclick="searchClick('${r.type}','${r.id}')"><div class="sr-icon">${r.icon}</div><div class="sr-main"><div class="sr-title">${r.label}</div><div class="sr-sub">${r.sub}</div></div></div>`).join('');
+  res.classList.add('show');
+}
+function searchClick(type,id){
+  document.getElementById('searchResults').classList.remove('show');
+  document.getElementById('globalSearch').value='';
+  if(type==='session') openDetail(id);
+  else if(type==='khubara') openEditKh(id);
+  else if(type==='fee') openFeeModal(id);
+}
+function hideSearch(){document.getElementById('searchResults').classList.remove('show');}
+
+// ══════════════════════════════════════════════════════
+//  CLIENTS
+// ══════════════════════════════════════════════════════
+function renderClients(){
+  const q=(document.getElementById('cl-srch').value||'').toLowerCase();
+  const clientMap={};
+  sessions.forEach(s=>{
+    const k=s.client.trim();
+    if(!clientMap[k]) clientMap[k]={name:k,sessions:[],done:0,pending:0};
+    clientMap[k].sessions.push(s);
+    if(s.status==='done') clientMap[k].done++;
+    else clientMap[k].pending++;
+  });
+  let clients=Object.values(clientMap).filter(c=>!q||c.name.toLowerCase().includes(q)).sort((a,b)=>b.sessions.length-a.sessions.length);
+  const grid=document.getElementById('clientsGrid');
+  if(!clients.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#bbb">لا توجد نتائج</div>';return;}
+  grid.innerHTML=clients.map(c=>`<div class="client-card" onclick="openClientDetail('${encodeURIComponent(c.name)}')">
+    <div class="cl-name">${c.name}</div>
+    <div class="cl-stats"><span class="cl-stat"><span>📁</span> ${c.sessions.length} ملف</span><span class="cl-stat"><span style="color:var(--orange)">⏰</span> ${c.pending} قادمة</span><span class="cl-stat"><span style="color:var(--green)">✅</span> ${c.done} منتهية</span></div>
+    <div class="cl-files">${c.sessions.slice(0,3).map(s=>`<span class="badge type-${s.type}">${TL[s.type]||'—'}</span>`).join('')}${c.sessions.length>3?`<span class="badge" style="background:#f0ebe0;color:var(--muted)">+${c.sessions.length-3}</span>`:''}</div>
+  </div>`).join('');
+}
+
+function openClientDetail(name){
+  const dname=decodeURIComponent(name);
+  const clientSessions=sessions.filter(s=>s.client.trim()===dname).sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById('clientModalTitle').textContent=`👤 ${dname}`;
+  document.getElementById('clientBody').innerHTML=`
+    <div style="display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap">
+      <div class="dfield"><div class="dk">إجمالي الملفات</div><div class="dv" style="font-size:1.3rem;font-weight:900">${clientSessions.length}</div></div>
+      <div class="dfield"><div class="dk">منتهية</div><div class="dv" style="color:var(--green);font-weight:700">${clientSessions.filter(s=>s.status==='done').length}</div></div>
+      <div class="dfield"><div class="dk">قادمة</div><div class="dv" style="color:var(--orange);font-weight:700">${clientSessions.filter(s=>s.status==='pending'||s.status==='urgent').length}</div></div>
+    </div>
+    <table class="sessions-tbl">
+      <thead><tr><th>رقم الملف</th><th>المحكمة</th><th>نوع القضية</th><th>التاريخ</th><th>الحالة</th></tr></thead>
+      <tbody>${clientSessions.map(s=>`<tr onclick="closeOv('clientOverlay');openDetail('${s.id}')"><td style="font-family:monospace;font-size:.75rem">${s.filenum||'—'}</td><td style="font-size:.72rem;color:${(CM[s.court_type]||CM.ibt_tanger).color}">${(CM[s.court_type]||CM.ibt_tanger).label}</td><td><span class="badge type-${s.type}">${TL[s.type]||'—'}</span></td><td style="font-size:.78rem">${fmtF(s.date)}</td><td><span class="badge badge-${s.status}">${STL[s.status]||'—'}</span></td></tr>`).join('')}</tbody>
+    </table>`;
+  document.getElementById('clientOverlay').classList.add('open');
+}
+
+// ══════════════════════════════════════════════════════
+//  FEES
+// ══════════════════════════════════════════════════════
+function renderFees(){
+  const total=feeRecords.reduce((a,f)=>a+parseNum(f.fee_agreed),0);
+  const paid=feeRecords.reduce((a,f)=>a+parseNum(f.fee_paid),0);
+  document.getElementById('fee-total').textContent=fmtNum(total)+' درهم';
+  document.getElementById('fee-paid').textContent=fmtNum(paid)+' درهم';
+  document.getElementById('fee-remaining').textContent=fmtNum(total-paid)+' درهم';
+  const grid=document.getElementById('feesGrid');
+  if(!feeRecords.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#bbb">لا توجد سجلات أتعاب — اضغط إضافة</div>';return;}
+  grid.innerHTML=feeRecords.sort((a,b)=>{ const st={overdue:0,pending:1,partial:2,paid:3}; return(st[a.fee_status]||1)-(st[b.fee_status]||1); }).map(f=>{
+    const ag=parseNum(f.fee_agreed), pd=parseNum(f.fee_paid), pct=ag?Math.min(100,pd/ag*100):0;
+    const stColor={pending:'#c2410c',partial:'#b45309',paid:'#166534',overdue:'#b91c1c'}[f.fee_status]||'#999';
+    const stBg={pending:'#fff7ed',partial:'#fffbeb',paid:'#f0fdf4',overdue:'#fef2f2'}[f.fee_status]||'#f0f0f0';
+    const stLabel={pending:'لم يُسدَّد',partial:'جزئي',paid:'مسدد ✅',overdue:'متأخر 🚨'}[f.fee_status]||'—';
+    return`<div class="fee-card ${f.fee_status}" onclick="openFeeModal('${f.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <div><div style="font-weight:700;color:var(--navy);font-size:.88rem">${f.client}</div><div style="font-size:.7rem;color:var(--muted)">${f.filenum||'—'} · <span class="badge type-${f.fee_type}">${TL[f.fee_type]||'—'}</span></div></div>
+        <span style="font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:8px;background:${stBg};color:${stColor};border:1px solid ${stBg}">${stLabel}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:.78rem;margin:.4rem 0">
+        <span style="color:var(--muted)">متفق عليه: <strong>${f.fee_agreed||'—'}</strong></span>
+        <span style="color:var(--green)">مدفوع: <strong>${f.fee_paid||'0'}</strong></span>
+      </div>
+      <div class="fee-progress"><div style="font-size:.62rem;color:var(--muted);display:flex;justify-content:space-between"><span>نسبة السداد</span><span>${Math.round(pct)}%</span></div><div class="fee-bar"><div class="fee-fill" style="width:${pct}%;background:${stColor}"></div></div></div>
+      ${f.fee_due?`<div style="font-size:.65rem;color:var(--muted);margin-top:4px">تاريخ الاستحقاق: ${fmtF(f.fee_due)}</div>`:''}
+      ${f.fee_notes?`<div style="font-size:.7rem;color:var(--ink);margin-top:4px;line-height:1.5">${f.fee_notes}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function openFeeModal(id){
+  editingFeeId=id;
+  const f=id?feeRecords.find(x=>x.id===id):null;
+  document.getElementById('feeTitle').textContent=f?'✏️ تعديل سجل الأتعاب':'💰 إضافة سجل أتعاب';
+  document.getElementById('feeDelBtn').style.display=f?'block':'none';
+  ['fee_client','fee_filenum','fee_agreed','fee_paid','fee_due','fee_notes'].forEach(k=>{const e=document.getElementById(k);if(e)e.value=f?f[k]||'':'';});
+  if(f){document.getElementById('fee_type').value=f.fee_type||'civil';document.getElementById('fee_status').value=f.fee_status||'pending';}
+  else{document.getElementById('fee_type').value='civil';document.getElementById('fee_status').value='pending';}
+  document.getElementById('feeOverlay').classList.add('open');
+}
+function saveFee(){
+  const client=document.getElementById('fee_client').value.trim();
+  if(!client){showToast('يرجى إدخال اسم الموكل');return;}
+  const data={client,filenum:document.getElementById('fee_filenum').value.trim(),fee_type:document.getElementById('fee_type').value,fee_agreed:document.getElementById('fee_agreed').value.trim(),fee_paid:document.getElementById('fee_paid').value.trim(),fee_status:document.getElementById('fee_status').value,fee_due:document.getElementById('fee_due').value,fee_notes:document.getElementById('fee_notes').value.trim()};
+  if(editingFeeId&&feeRecords.find(f=>f.id===editingFeeId)){const idx=feeRecords.findIndex(f=>f.id===editingFeeId);feeRecords[idx]={...feeRecords[idx],...data};showToast('تم التحديث');}
+  else{data.id=uid();feeRecords.push(data);showToast('تمت الإضافة');}
+  persist();closeOv('feeOverlay');renderFees();
+}
+function deleteFee(){if(!editingFeeId)return;if(!confirm('حذف هذا السجل؟'))return;feeRecords=feeRecords.filter(f=>f.id!==editingFeeId);persist();closeOv('feeOverlay');renderFees();showToast('تم الحذف');}
+
+// ══════════════════════════════════════════════════════
+//  NOTIFICATIONS
+// ══════════════════════════════════════════════════════
+function updateBadges(){
+  const cnt=getNotifs().length;
+  document.getElementById('notifBadge').textContent=cnt;
+  document.getElementById('sb-nb').textContent=cnt;
+  const kh=khubaraFiles.filter(k=>k.kh_status!=='done').length;
+  document.getElementById('sb-kh').textContent=kh;
+}
+
+function getNotifs(){
+  const notifs=[];const seen=new Set();
+  function push(o){const k=o.id+o._type;if(!seen.has(k)){seen.add(k);notifs.push(o);}}
+  sessions.forEach(s=>{
+    if(s.status==='done') return;
+    const d=dayDiff(s.date);
+    if(d!==null&&d<0&&s.status!=='postponed') push({...s,_diff:d,_type:'overdue'});
+    if(d===0) push({...s,_diff:0,_type:'today'});
+    else if(d===1) push({...s,_diff:1,_type:'tomorrow'});
+    else if(d>0&&d<=3) push({...s,_diff:d,_type:'soon'});
+    else if(d>0&&d<=7) push({...s,_diff:d,_type:'week'});
+    if(s.status==='postponed'&&s.next_hearing){
+      const d2=dayDiff(s.next_hearing);
+      if(d2!==null&&d2<0) push({...s,_diff:d2,_type:'post_over',_useNext:true});
+      else if(d2===0) push({...s,_diff:0,_type:'post_today',_useNext:true});
+      else if(d2>0&&d2<=7) push({...s,_diff:d2,_type:'postponed',_useNext:true});
+    }
+    if(s.status==='urgent'&&d!==null&&d>=0) push({...s,_diff:d,_type:'urgent'});
+  });
+  khubaraFiles.forEach(k=>{
+    if(k.kh_status==='done') return;
+    if(k.kh_deadline){const d=dayDiff(k.kh_deadline);if(d!==null){if(d<0)push({...k,_diff:d,_type:'kh_over',_isKh:true});else if(d<=7)push({...k,_diff:d,_type:'kh_soon',_isKh:true});}}
+    if(k.kh_report_deadline){const d=dayDiff(k.kh_report_deadline);if(d!==null){if(d<0)push({...k,_diff:d,_type:'rpt_over',_isKh:true});else if(d<=7)push({...k,_diff:d,_type:'rpt_soon',_isKh:true});}}
+  });
+  feeRecords.forEach(f=>{
+    if(f.fee_status==='paid')return;
+    if(f.fee_due){const d=dayDiff(f.fee_due);if(d!==null&&d<0&&f.fee_status!=='paid')push({...f,_diff:d,_type:'fee_over',_isFee:true});}
+  });
+  return notifs.sort((a,b)=>a._diff-b._diff);
+}
+
+function renderNotif(){
+  const list=document.getElementById('notifList');
+  const notifs=getNotifs();
+  if(!notifs.length){list.innerHTML='<div style="text-align:center;padding:3rem;color:#bbb">🎉 لا توجد إشعارات</div>';return;}
+  const TM={
+    today:     {icon:'🔴',label:'اليوم',          cls:'nt-urgent'},
+    tomorrow:  {icon:'🟠',label:'غداً',            cls:'nt-soon'},
+    soon:      {icon:'🟡',label:'قريباً',          cls:'nt-soon'},
+    week:      {icon:'🔵',label:'هذا الأسبوع',    cls:'nt-week'},
+    overdue:   {icon:'🚨',label:'متأخرة',          cls:'nt-urgent'},
+    postponed: {icon:'⏭', label:'مؤجلة',           cls:'nt-postponed'},
+    post_over: {icon:'⏭🚨',label:'مؤجلة ومتأخرة', cls:'nt-urgent'},
+    post_today:{icon:'⏭🔴',label:'مؤجلة — اليوم', cls:'nt-urgent'},
+    urgent:    {icon:'⚠️',label:'عاجلة',           cls:'nt-urgent'},
+    kh_over:   {icon:'🔬🚨',label:'تجاوز أجل الخبرة',cls:'nt-urgent'},
+    kh_soon:   {icon:'🔬', label:'أجل الخبرة قريب', cls:'nt-soon'},
+    rpt_over:  {icon:'📋🚨',label:'تجاوز أجل المستنتجات',cls:'nt-urgent'},
+    rpt_soon:  {icon:'📋', label:'أجل المستنتجات قريب',cls:'nt-soon'},
+    fee_over:  {icon:'💰🚨',label:'أتعاب متأخرة',  cls:'nt-urgent'},
+  };
+  list.innerHTML=notifs.map(n=>{
+    const tm=TM[n._type]||TM.week;
+    const date=n._useNext?n.next_hearing:n.date;
+    const isCrit=n._type.includes('over')||n._type==='today'||n._type==='urgent';
+    const clickFn=n._isKh?`openEditKh('${n.id}')`:n._isFee?`openFeeModal('${n.id}')`:`openDetail('${n.id}')`;
+    let extra='';
+    if(n._type==='overdue'||n._type==='post_over') extra=`<span style="color:var(--red);font-weight:600;font-size:.72rem">🚨 تأخير ${Math.abs(n._diff)} يوم</span>`;
+    if(n._type==='kh_over') extra=`<span style="color:var(--red);font-size:.72rem">🔬 تجاوز بـ ${Math.abs(n._diff)} يوم — ${fmtF(n.kh_deadline)}</span>`;
+    if(n._type==='kh_soon') extra=`<span style="color:var(--orange);font-size:.72rem">🔬 الأجل: ${fmtF(n.kh_deadline)}</span>`;
+    if(n._type==='rpt_over') extra=`<span style="color:var(--red);font-size:.72rem">📋 تجاوز بـ ${Math.abs(n._diff)} يوم</span>`;
+    if(n._type==='rpt_soon') extra=`<span style="color:var(--orange);font-size:.72rem">📋 الأجل: ${fmtF(n.kh_report_deadline)}</span>`;
+    if(n._useNext) extra+=`<span style="color:var(--orange);font-size:.72rem"> ⏭ مؤجلة إلى ${fmtF(n.next_hearing)}</span>`;
+    if(n._isFee) extra=`<span style="color:var(--red);font-size:.72rem">💰 أتعاب متأخرة — ${n.fee_agreed||'—'}</span>`;
+    return`<div class="notif-card${isCrit?' crit':''}" onclick="${clickFn}">
+      <div class="notif-icon">${tm.icon}</div>
+      <div class="notif-body">
+        <div class="notif-title">${n.client} — ${n.filenum||'—'}</div>
+        <div class="notif-sub">${n._isKh?(CM[n.kh_court]||CM.ibt_tanger).label:(CM[n.court_type]||CM.ibt_tanger).label} ${!n._isKh&&n.room?'· '+n.room:''} ${!n._isKh&&n.time?'· '+n.time:''}</div>
+        <div class="notif-sub" style="margin-top:2px">${extra}</div>
+      </div>
+      <div class="notif-time ${tm.cls}">${tm.label}<br>${fmtF(date)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+//  ARCHIVE
+// ══════════════════════════════════════════════════════
+let aTab='all';
+function setATab(t){aTab=t;document.querySelectorAll('.atab').forEach((b,i)=>b.classList.toggle('active',['all','done','court','type','year'][i]===t));renderArchive();}
+function renderArchive(){
+  const ysel=document.getElementById('arc-year');
+  const years=[...new Set(sessions.map(s=>(s.date||'').split('-')[0]).filter(Boolean))].sort().reverse();
+  const cy=ysel.value;
+  ysel.innerHTML='<option value="">كل السنوات</option>'+years.map(y=>`<option value="${y}"${cy===y?' selected':''}>${y}</option>`).join('');
+  const q=(document.getElementById('arc-srch').value||'').toLowerCase();
+  const yr=document.getElementById('arc-year').value;
+  let list=sessions.filter(s=>{
+    if(aTab==='done'&&s.status!=='done')return false;
+    if(yr&&!(s.date||'').startsWith(yr))return false;
+    if(q&&!s.client.toLowerCase().includes(q)&&!(s.filenum||'').toLowerCase().includes(q))return false;
+    return true;
+  });
+  if(aTab==='court') list=list.sort((a,b)=>(CO.indexOf(a.court_type)||0)-(CO.indexOf(b.court_type)||0));
+  else if(aTab==='type') list=list.sort((a,b)=>(a.type||'').localeCompare(b.type||''));
+  else list=list.sort((a,b)=>b.date.localeCompare(a.date));
+  const grid=document.getElementById('archiveGrid');
+  if(!list.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#bbb">لا توجد ملفات مطابقة</div>';return;}
+  grid.innerHTML=list.map(s=>{const cm=CM[s.court_type]||CM.ibt_tanger;return`<div class="arc-card" style="--ct:${cm.color}" onclick="openDetail('${s.id}')"><div style="font-size:.62rem;font-weight:700;color:${cm.color};text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">${cm.label}</div><div style="font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:2px">${s.client}</div><div style="font-family:monospace;font-size:.72rem;background:var(--navy);color:var(--gold3);padding:2px 7px;border-radius:5px;display:inline-block;margin-bottom:4px">${s.filenum||'—'}</div><div style="display:flex;gap:4px;flex-wrap:wrap"><span class="badge type-${s.type}">${TL[s.type]||'—'}</span><span class="badge badge-${s.status}">${STL[s.status]||'—'}</span><span style="font-size:.65rem;color:var(--muted)">${fmtF(s.date)}</span></div></div>`;}).join('');
+}
+
+// ══════════════════════════════════════════════════════
+//  TABLIGH / TANFIDH
+// ══════════════════════════════════════════════════════
+function setTTTab(t){ttTab=t;document.getElementById('tttab-t').className='ttab'+(t==='tabligh'?' act-t':'');document.getElementById('tttab-e').className='ttab'+(t==='tanfidh'?' act-e':'');renderTT();}
+function renderTT(){
+  const grid=document.getElementById('ttGrid');
+  const list=ttFiles.filter(f=>f.type===ttTab).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  if(!list.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#bbb">لا توجد ملفات ${ttTab==='tabligh'?'تبليغ':'تنفيذ'}</div>`;return;}
+  const c=ttTab==='tabligh'?'#0f766e':'#6d28d9';
+  grid.innerHTML=list.map(f=>`<div class="tt-card ${f.type}" onclick="openEditTT('${f.id}')">
+    <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+      <span style="font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:8px;background:${ttTab==='tabligh'?'#f0fdfa':'#f5f3ff'};color:${c};border:1px solid ${ttTab==='tabligh'?'#99f6e4':'#ddd6fe'}">${ttTab==='tabligh'?'📨 تبليغ':'⚡ تنفيذ'}</span>
+      <span style="font-size:.7rem;font-weight:700;color:${c}">${f.stage||0}%</span>
+    </div>
+    <div style="font-weight:700;color:var(--navy);margin-bottom:2px">${f.client}</div>
+    <div style="font-family:monospace;font-size:.72rem;background:var(--navy);color:var(--gold3);padding:2px 7px;border-radius:5px;display:inline-block;margin-bottom:4px">${f.filenum||'—'}</div>
+    <div style="font-size:.72rem;color:var(--muted);margin-bottom:.4rem">${(CM[f.court]||CM.ibt_tanger).label} · ${fmtF(f.date)}</div>
+    ${f.opponent?`<div style="font-size:.7rem;color:var(--muted)">ض: ${f.opponent}</div>`:''}
+    ${f.notes?`<div style="font-size:.7rem;color:var(--ink);margin-top:4px;line-height:1.5">${f.notes}</div>`:''}
+    <div style="margin-top:.5rem"><div style="height:6px;background:#f0ebe0;border-radius:3px;overflow:hidden"><div style="height:100%;width:${f.stage||0}%;background:${c};border-radius:3px"></div></div></div>
+  </div>`).join('');
+}
+function openAddTTModal(){editingTTId=null;document.getElementById('ttTitle').textContent='➕ ملف تبليغ / تنفيذ';document.getElementById('ttDelBtn').style.display='none';['tt_client','tt_filenum','tt_opponent','tt_notes'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('tt_type').value=ttTab;document.getElementById('tt_date').value='';document.getElementById('tt_stage').value='0';document.getElementById('ttOverlay').classList.add('open');}
+function openEditTT(id){const f=ttFiles.find(x=>x.id===id);if(!f)return;editingTTId=id;document.getElementById('ttTitle').textContent='✏️ تعديل ملف';document.getElementById('ttDelBtn').style.display='block';document.getElementById('tt_client').value=f.client||'';document.getElementById('tt_filenum').value=f.filenum||'';document.getElementById('tt_type').value=f.type||'tabligh';document.getElementById('tt_court').value=f.court||'ibt_tanger';document.getElementById('tt_date').value=f.date||'';document.getElementById('tt_opponent').value=f.opponent||'';document.getElementById('tt_stage').value=f.stage||'0';document.getElementById('tt_notes').value=f.notes||'';document.getElementById('ttOverlay').classList.add('open');}
+function saveTT(){const client=document.getElementById('tt_client').value.trim();if(!client){showToast('يرجى إدخال اسم الموكل');return;}const data={client,filenum:document.getElementById('tt_filenum').value.trim(),type:document.getElementById('tt_type').value,court:document.getElementById('tt_court').value,date:document.getElementById('tt_date').value,opponent:document.getElementById('tt_opponent').value.trim(),stage:document.getElementById('tt_stage').value,notes:document.getElementById('tt_notes').value.trim()};if(editingTTId&&ttFiles.find(f=>f.id===editingTTId)){const idx=ttFiles.findIndex(f=>f.id===editingTTId);ttFiles[idx]={...ttFiles[idx],...data};showToast('تم التحديث');}else{data.id=uid();ttFiles.push(data);showToast('تمت الإضافة');}persist();closeOv('ttOverlay');renderTT();}
+function deleteTT(){if(!editingTTId)return;if(!confirm('حذف؟'))return;ttFiles=ttFiles.filter(f=>f.id!==editingTTId);persist();closeOv('ttOverlay');renderTT();showToast('تم الحذف');}
+
+// ══════════════════════════════════════════════════════
+//  KHUBARA
+// ══════════════════════════════════════════════════════
+const StageLbl={appointed:'تعيين الخبير',provision:'انتظار الاحتياطي',ongoing:'الخبرة جارية',site_visit:'معاينة الموضوع',draft:'مشروع التقرير',submitted:'إيداع التقرير',done:'منتهية'};
+function setKhTab(t){khTab=t;document.getElementById('khtab-a').className='ttab'+(t==='active'?' act-k':'');document.getElementById('khtab-d').className='ttab'+(t==='done'?' act-k':'');renderKh();}
+function renderKh(){
+  const grid=document.getElementById('khubaraGrid');
+  const list=khubaraFiles.filter(f=>khTab==='done'?f.kh_status==='done':f.kh_status!=='done');
+  updateBadges();
+  if(!list.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#bbb">لا توجد خبرات ${khTab==='done'?'منتهية':'جارية'}</div>`;return;}
+  function dc(iso_str){const d=dayDiff(iso_str);if(d===null)return'';if(d<0)return'ov';if(d<=7)return'sn';return'';}
+  grid.innerHTML=list.map(f=>{
+    const cm=CM[f.kh_court]||CM.ibt_tanger;
+    const dd=dayDiff(f.kh_deadline),rd=dayDiff(f.kh_report_deadline);
+    const isD=(dd!==null&&dd<0)||(rd!==null&&rd<0)||f.kh_status==='delayed';
+    const payC={pending:'#c2410c',partial:'#b45309',done:'#166534',waived:'#6b7280'}[f.kh_payment_status]||'#999';
+    const payL={pending:'لم يُؤدَّ',partial:'جزئي',done:'مؤدى ✅',waived:'معفى'}[f.kh_payment_status]||'—';
+    return`<div class="tt-card khubara${isD?' ':' '}" onclick="openEditKh('${f.id}')" style="border-right-color:${isD?'var(--red)':'#0369a1'}">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span class="stage-pill stage-${f.kh_stage||'appointed'}">${StageLbl[f.kh_stage||'appointed']||'—'}</span>
+        <span style="font-size:.62rem;color:${cm.color};font-weight:600">${cm.label}</span>
+      </div>
+      <div style="font-weight:700;color:var(--navy);font-size:.88rem">${f.client}</div>
+      <div style="font-family:monospace;font-size:.7rem;background:var(--navy);color:var(--gold3);padding:2px 7px;border-radius:5px;display:inline-block;margin:.3rem 0">${f.filenum||'—'}</div>
+      <div style="font-size:.72rem;color:#0369a1;font-weight:600;margin-bottom:.3rem">🔬 ${f.kh_expert_name||'لم يُعيَّن'}${f.kh_expert_specialty?' — '+f.kh_expert_specialty:''}</div>
+      <div class="kh-dates">
+        <div class="kh-date-box"><div class="dbl">تعيين</div><div class="dv">${fmtF(f.kh_appoint_date)}</div></div>
+        <div class="kh-date-box ${dc(f.kh_deadline)}"><div class="dbl">⏰ أجل الخبرة</div><div class="dv">${f.kh_deadline?fmtF(f.kh_deadline):'—'}${dd!==null&&dd<0?` <b style="color:var(--red);font-size:.58rem">(+${Math.abs(dd)}ي)</b>`:''}</div></div>
+        <div class="kh-date-box ${dc(f.kh_report_deadline)}"><div class="dbl">📋 المستنتجات</div><div class="dv">${f.kh_report_deadline?fmtF(f.kh_report_deadline):'—'}${rd!==null&&rd<0?` <b style="color:var(--red);font-size:.58rem">(+${Math.abs(rd)}ي)</b>`:''}</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:.4rem;padding-top:.4rem;border-top:1px solid #f0ebe0;flex-wrap:wrap">
+        <span style="font-size:.62rem;color:var(--muted)">💰 ${f.kh_provision||'—'}</span>
+        <span style="font-size:.6rem;font-weight:700;padding:1px 7px;border-radius:8px;background:rgba(0,0,0,.04);color:${payC}">${payL}</span>
+      </div>
+      ${f.kh_notes?`<div style="font-size:.7rem;color:var(--ink);margin-top:.4rem;line-height:1.5">${f.kh_notes}</div>`:''}
+    </div>`;
+  }).join('');
+}
+function openAddKhModal(){editingKhId=null;document.getElementById('khTitle').textContent='🔬 إضافة ملف خبرة';document.getElementById('khDelBtn').style.display='none';['kh_client','kh_filenum','kh_opponent','kh_judge','kh_expert_name','kh_expert_specialty','kh_appoint_date','kh_deadline','kh_report_deadline','kh_provision','kh_paid','kh_payment_date','kh_notes'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});['kh_court','kh_type','kh_payment_status','kh_payer','kh_stage','kh_status'].forEach(id=>{const e=document.getElementById(id);if(e)e.selectedIndex=0;});document.getElementById('khOverlay').classList.add('open');}
+function openEditKh(id){const f=khubaraFiles.find(x=>x.id===id);if(!f)return;editingKhId=id;document.getElementById('khTitle').textContent='✏️ تعديل ملف الخبرة';document.getElementById('khDelBtn').style.display='block';['kh_client','kh_filenum','kh_opponent','kh_judge','kh_expert_name','kh_expert_specialty','kh_appoint_date','kh_deadline','kh_report_deadline','kh_provision','kh_paid','kh_payment_date','kh_notes'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=f[id]||'';});['kh_court','kh_type','kh_payment_status','kh_payer','kh_stage','kh_status'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=f[id]||'';});document.getElementById('khOverlay').classList.add('open');}
+function saveKh(){const client=document.getElementById('kh_client').value.trim();if(!client){showToast('يرجى إدخال اسم الموكل');return;}const data={};['kh_client','kh_filenum','kh_opponent','kh_judge','kh_expert_name','kh_expert_specialty','kh_appoint_date','kh_deadline','kh_report_deadline','kh_provision','kh_paid','kh_payment_date','kh_notes','kh_court','kh_type','kh_payment_status','kh_payer','kh_stage','kh_status'].forEach(id=>{const e=document.getElementById(id);if(e)data[id]=e.value;});data.client=data.kh_client;data.filenum=data.kh_filenum;if(editingKhId&&khubaraFiles.find(f=>f.id===editingKhId)){const idx=khubaraFiles.findIndex(f=>f.id===editingKhId);khubaraFiles[idx]={...khubaraFiles[idx],...data};showToast('تم التحديث');}else{data.id=uid();khubaraFiles.push(data);showToast('تمت الإضافة');}persist();closeOv('khOverlay');renderKh();updateBadges();}
+function deleteKh(){if(!editingKhId)return;if(!confirm('حذف؟'))return;khubaraFiles=khubaraFiles.filter(f=>f.id!==editingKhId);persist();closeOv('khOverlay');renderKh();updateBadges();showToast('تم الحذف');}
+
+// ══════════════════════════════════════════════════════
+//  TEMPLATES
+// ══════════════════════════════════════════════════════
+const TPLS=[
+  {id:'maqal_madani',icon:'📄',name:'مقال افتتاحي مدني',desc:'نموذج دعوى مدنية أمام المحكمة الابتدائية'},
+  {id:'maqal_istinaf',icon:'📄',name:'مقال استئنافي',desc:'نموذج استئناف أمام محكمة الاستئناف مع الحجج'},
+  {id:'jawab',icon:'📝',name:'مذكرة جواب',desc:'نموذج رد على المقال مع الدفوع الشكلية والموضوعية'},
+  {id:'talab_tahfiz',icon:'🏠',name:'مقال تحفيظ عقاري',desc:'نموذج طلب تحفيظ عقار أمام المحافظة العقارية'},
+  {id:'itirad_tahfiz',icon:'⚖️',name:'مقال اعتراض على التحفيظ',desc:'نموذج اعتراض على مطلب التحفيظ العقاري'},
+  {id:'talab_istijal',icon:'📋',name:'طلب إجراءات استعجالية',desc:'نموذج طلب استعجال أمام رئيس المحكمة'},
+  {id:'maqal_shoghl',icon:'👷',name:'مقال شغلي',desc:'نموذج دعوى فصل تعسفي أمام المحكمة الابتدائية'},
+  {id:'tabligh_tpl',icon:'📨',name:'نموذج تبليغ',desc:'نموذج طلب تبليغ حكم قضائي للطرف المحكوم عليه'},
+  {id:'tanfidh_tpl',icon:'⚡',name:'طلب تنفيذ حكم',desc:'نموذج طلب تنفيذ حكم نهائي حائز لقوة الشيء المقضي به'},
+  {id:'talab_khubara',icon:'🔬',name:'طلب خبرة',desc:'نموذج طلب تعيين خبير قضائي لتحديد الأضرار أو القيمة'},
+  {id:'maqal_idari',icon:'🏛',name:'طعن إداري',desc:'نموذج طعن في قرار إداري أمام المحكمة الإدارية'},
+  {id:'tanazul',icon:'✍️',name:'مقال تنازل',desc:'نموذج تنازل عن الدعوى أو الاستئناف مع الشروط'},
+];
+function renderTemplates(){
+  document.getElementById('tplGrid').innerHTML=TPLS.map(t=>`<div class="tpl-card"><span class="tpl-icon">${t.icon}</span><div class="tpl-name">${t.name}</div><div class="tpl-desc">${t.desc}</div><button class="tpl-btn" onclick="downloadTpl('${t.id}','${t.name}')">⬇ تنزيل Word</button></div>`).join('');
+}
+function downloadTpl(id,name){
+  const header='مكتب الأستاذ عبد السلام بنسيسي\nمحامي بهيئة المحامين بطنجة\n'+('─'.repeat(50))+'\n\n';
+  const date=new Date().toLocaleDateString('ar-MA');
+  const tpls={
+    maqal_madani:`${header}بتاريخ: ${date}\n\nالسيد رئيس المحكمة الابتدائية بـ ___________\n\nالمقال الافتتاحي\n\nيتشرف الأستاذ عبد السلام بنسيسي المحامي بهيئة طنجة، نيابةً عن:\nالسيد/ة: ___________________________\n\nأن يتقدم بهذه الدعوى ضد:\nالسيد/ة: ___________________________\n\nالموضوع: ___________________________\n\nالوقائع:\n___________________________\n\nالطلبات:\nيلتمس الأستاذ الحكم بـ:\n- ___________________________\n\nالأستاذ عبد السلام بنسيسي`,
+    maqal_istinaf:`${header}بتاريخ: ${date}\n\nالسادة أعضاء هيئة محكمة الاستئناف بـ ___________\n\nمقال استئنافي\n\nنيابةً عن:\nالمستأنف: ___________________________\nضد:\nالمستأنف عليه: ___________________________\n\nفي الحكم الصادر بتاريخ: ___________ تحت عدد: ___________\n\nأسباب الاستئناف:\n1. ___________________________\n\nالطلبات: إلغاء الحكم المستأنف والحكم ابتداءً بـ:\n- ___________________________\n\nالأستاذ عبد السلام بنسيسي`,
+    jawab:`${header}بتاريخ: ${date}\n\nمذكرة جواب\n\nرقم الملف: ___________________________\nالطرف المدعى عليه: ___________________________\n\nأولاً: الدفوع الشكلية:\n- ___________________________\n\nثانياً: الدفوع الموضوعية:\n- ___________________________\n\nثالثاً: خلاصة الطلبات:\nرفض الطلبات الأصلية لعدم التأسيس.\n\nالأستاذ عبد السلام بنسيسي`,
+  };
+  const content=tpls[id]||`${header}نموذج: ${name}\n\nالموكل: ___________________________\nرقم الملف: ___________________________\nالمحكمة: ___________________________\n\n[يرجى تعبئة البيانات المطلوبة]\n\nالأستاذ عبد السلام بنسيسي\nمحامي بهيئة المحامين بطنجة`;
+  const blob=new Blob([content],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name+'.txt'; a.click();
+  showToast('⬇ جارٍ تنزيل: '+name);
+}
+
+// ══════════════════════════════════════════════════════
+//  DETAIL MODAL
+// ══════════════════════════════════════════════════════
+function openDetail(id){
+  const s=sessions.find(x=>x.id===id);if(!s)return;
+  detailId=id;
+  const cm=CM[s.court_type]||CM.ibt_tanger;
+  document.getElementById('detailBody').innerHTML=`
+    <div class="det-hdr">
+      <div>
+        <span style="background:${cm.bg};color:${cm.color};border:1px solid ${cm.color}30;font-size:.76rem;font-weight:700;padding:4px 11px;border-radius:var(--r8);display:inline-block">${cm.label}</span>
+        ${s.next_hearing?`<div style="margin-top:4px;font-size:.68rem;color:var(--red);font-weight:700">⏭ تأجيل: ${fmtF(s.next_hearing)}</div>`:''}
+        <div style="margin-top:4px"><span class="badge badge-${s.status}">${STL[s.status]||'—'}</span></div>
+      </div>
+      <div style="flex:1">
+        <h2 style="font-family:'Amiri',serif;font-size:1.2rem;color:var(--navy);margin-bottom:3px">${s.client}</h2>
+        <span style="font-family:monospace;background:var(--navy);color:var(--gold3);padding:2px 9px;border-radius:5px;font-size:.8rem">${s.filenum||'بدون رقم'}</span>
+        ${s.opponent?`<div style="font-size:.75rem;color:var(--muted);margin-top:3px">ضد: ${s.opponent}</div>`:''}
+      </div>
+    </div>
+    <div class="det-grid">
+      <div class="dfield"><div class="dk">📅 التاريخ</div><div class="dv">${fmtF(s.date)}</div></div>
+      <div class="dfield"><div class="dk">⏰ الساعة</div><div class="dv">${s.time||'—'}</div></div>
+      <div class="dfield"><div class="dk">🏛 المحكمة</div><div class="dv">${s.court_name||cm.label}</div></div>
+      <div class="dfield"><div class="dk">🚪 القاعة</div><div class="dv">${s.room||'—'}</div></div>
+      <div class="dfield"><div class="dk">⚖️ نوع القضية</div><div class="dv"><span class="badge type-${s.type}">${TL[s.type]||'—'}</span></div></div>
+      <div class="dfield"><div class="dk">📋 الإجراء</div><div class="dv">${PL[s.procedure]||'—'}</div></div>
+      <div class="dfield"><div class="dk">🎭 الجهة الممثلة</div><div class="dv">${SL[s.side]||'—'}</div></div>
+      <div class="dfield"><div class="dk">👨‍⚖️ القاضي</div><div class="dv">${s.judge||'—'}</div></div>
+      <div class="dfield"><div class="dk">💰 قيمة الإجراء</div><div class="dv">${s.amount||'—'}</div></div>
+      <div class="dfield"><div class="dk">💼 الأتعاب المتفق عليها</div><div class="dv">${s.fees_agreed||'—'}</div></div>
+      <div class="dfield"><div class="dk">✅ المدفوع</div><div class="dv">${s.fees_paid||'—'}</div></div>
+      <div class="dfield"><div class="dk">📂 الوثائق</div><div class="dv">${s.docs||'—'}</div></div>
+    </div>
+    ${s.notes?`<div class="notes-bx"><strong style="display:block;margin-bottom:3px;color:var(--navy)">📝 الملاحظات:</strong>${s.notes}</div>`:''}
+    <div class="mhk-sec">
+      <div class="mhk-title">🌐 بوابة mahakim.ma</div>
+      <button class="mhk-link" onclick="openMahakim('${s.filenum||''}')">🔍 فتح ملف ${s.filenum||'—'} في mahakim.ma</button>
+      <div style="font-size:.65rem;color:rgba(167,243,208,.7);margin-bottom:.6rem">سيُنسخ رقم الملف تلقائياً — الصق بـ Ctrl+V</div>
+      <div class="nh-row">
+        <label>📅 تسجيل جلسة قادمة:</label>
+        <input type="date" id="nhInput" value="${s.next_hearing||''}">
+        <button class="nh-save" onclick="saveNextHearing('${s.id}')">✅ حفظ وإنشاء</button>
+        ${s.next_hearing?`<span style="color:#a7f3d0;font-size:.72rem;font-weight:600">محفوظ: ${fmtF(s.next_hearing)}</span>`:''}
+      </div>
+    </div>`;
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+function saveNextHearing(id){
+  const val=document.getElementById('nhInput').value;
+  if(!val){showToast('يرجى اختيار تاريخ التأجيل');return;}
+  const idx=sessions.findIndex(s=>s.id===id);if(idx===-1)return;
+  const orig=sessions[idx];
+  sessions[idx].status='postponed';
+  sessions[idx].next_hearing=val;
+  if(!sessions.some(s=>s.parent_id===id&&s.date===val)){
+    sessions.push(Object.assign({},orig,{id:uid(),date:val,status:'pending',next_hearing:'',parent_id:id,notes:(orig.notes?orig.notes+' ':'')+'[مؤجلة من: '+fmtF(orig.date)+']'}));
+  }
+  persist();showToast('تم التأجيل — جلسة جديدة: '+fmtF(val));
+  renderWeek();renderList();updateBadges();
+  setTimeout(()=>openDetail(id),80);
+}
+
+function editFromDetail(){closeOv('detailOverlay');openEditModal(detailId);}
+
+// ══════════════════════════════════════════════════════
+//  ADD/EDIT SESSION
+// ══════════════════════════════════════════════════════
+function openAddModal(dateStr){
+  editingId=null;
+  document.getElementById('addTitle').textContent='➕ إضافة جلسة جديدة';
+  document.getElementById('delBtn').style.display='none';
+  ['f_client','f_filenum','f_opponent','f_court_name','f_room','f_date','f_time','f_judge','f_next_hearing','f_notes','f_docs','f_amount','f_fees_agreed','f_fees_paid'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('f_court_type').value='ibt_tanger';
+  document.getElementById('f_status').value='pending';
+  document.getElementById('f_type').value='';
+  document.getElementById('f_procedure').value='';
+  document.getElementById('f_degree').value='1';
+  document.getElementById('f_side').value='plaintiff';
+  if(dateStr) document.getElementById('f_date').value=dateStr;
+  document.getElementById('addOverlay').classList.add('open');
+}
+function openEditModal(id){
+  const s=sessions.find(x=>x.id===id);if(!s)return;
+  editingId=id;
+  document.getElementById('addTitle').textContent='✏️ تعديل الجلسة';
+  document.getElementById('delBtn').style.display='block';
+  ['client','filenum','opponent','court_name','room','date','time','judge','next_hearing','notes','docs','amount','fees_agreed','fees_paid'].forEach(k=>{const e=document.getElementById('f_'+k);if(e)e.value=s[k]||'';});
+  document.getElementById('f_court_type').value=s.court_type||'ibt_tanger';
+  document.getElementById('f_status').value=s.status||'pending';
+  document.getElementById('f_type').value=s.type||'';
+  document.getElementById('f_procedure').value=s.procedure||'';
+  document.getElementById('f_degree').value=s.degree||'1';
+  document.getElementById('f_side').value=s.side||'plaintiff';
+  document.getElementById('addOverlay').classList.add('open');
+}
+function saveSession(){
+  const client=document.getElementById('f_client').value.trim();
+  const date=document.getElementById('f_date').value;
+  if(!client||!date){showToast('يرجى تعبئة اسم الموكل والتاريخ');return;}
+  const data={client,date,filenum:document.getElementById('f_filenum').value.trim(),opponent:document.getElementById('f_opponent').value.trim(),court_type:document.getElementById('f_court_type').value,court_name:document.getElementById('f_court_name').value.trim(),room:document.getElementById('f_room').value.trim(),time:document.getElementById('f_time').value,status:document.getElementById('f_status').value,judge:document.getElementById('f_judge').value.trim(),next_hearing:document.getElementById('f_next_hearing').value,type:document.getElementById('f_type').value,procedure:document.getElementById('f_procedure').value,degree:document.getElementById('f_degree').value,side:document.getElementById('f_side').value,notes:document.getElementById('f_notes').value.trim(),docs:document.getElementById('f_docs').value.trim(),amount:document.getElementById('f_amount').value.trim(),fees_agreed:document.getElementById('f_fees_agreed').value.trim(),fees_paid:document.getElementById('f_fees_paid').value.trim()};
+  if(editingId&&sessions.find(s=>s.id===editingId)){const idx=sessions.findIndex(s=>s.id===editingId);sessions[idx]={...sessions[idx],...data};showToast('تم التحديث');}
+  else{data.id=uid();sessions.push(data);showToast('تمت الإضافة');}
+  persist();closeOv('addOverlay');renderWeek();renderList();updateBadges();
+}
+function deleteSession(){if(!editingId)return;if(!confirm('حذف هذه الجلسة نهائياً؟'))return;sessions=sessions.filter(s=>s.id!==editingId);persist();closeOv('addOverlay');closeOv('detailOverlay');renderWeek();renderList();updateBadges();showToast('تم الحذف');}
+
+// ══════════════════════════════════════════════════════
+//  ROLE TABLE
+// ══════════════════════════════════════════════════════
+function openRoleModal(){
+  const days=getWD(weekOffset);
+  let html=`<div id="rpa" style="font-family:'Tajawal',sans-serif;direction:rtl">
+    <div style="text-align:center;margin-bottom:.8rem">
+      <div style="font-family:'Amiri',serif;font-size:1.2rem;font-weight:700;color:var(--navy)">مكتب الأستاذ عبد السلام بنسيسي</div>
+      <div style="font-size:.72rem;color:var(--muted)">محامي بهيئة المحامين بطنجة</div>
+      <div style="font-size:.82rem;font-weight:700;color:var(--gold);margin-top:3px">جدول أدوار: ${fmt(days[0])} — ${fmt(days[3])} ${days[0].getFullYear()}</div>
+    </div>`;
+  ROLE_COURTS.forEach(court=>{
+    const list=[];
+    days.forEach((d,di)=>{sessions.filter(s=>s.date===iso(d)&&s.court_type===court.key).sort((a,b)=>(a.time||'').localeCompare(b.time||'')).forEach(s=>list.push({day:DAYS[di],s}));});
+    if(!list.length) return;
+    const c=(CM[court.key]||CM.ibt_tanger).color;
+    html+=`<div style="margin-bottom:1rem"><div style="background:${c};color:#fff;padding:.48rem .9rem;border-radius:7px 7px 0 0;font-size:.8rem;font-weight:700;display:flex;justify-content:space-between"><span>🏛 ${court.label}</span><span style="background:rgba(255,255,255,.2);padding:1px 8px;border-radius:9px;font-size:.7rem">${list.length} جلسة</span></div>
+    <table style="width:100%;border-collapse:collapse;background:#fff;border:1px solid #e8e0d0;border-top:none;font-size:.76rem">
+      <thead><tr style="background:#f5f0e5"><th style="padding:.45rem .7rem;text-align:right;color:var(--navy);font-size:.68rem;border-bottom:1px solid #e8e0d0">اليوم</th><th style="padding:.45rem .7rem;text-align:right;color:var(--navy);font-size:.68rem;border-bottom:1px solid #e8e0d0">الساعة</th><th style="padding:.45rem .7rem;text-align:right;color:var(--navy);font-size:.68rem;border-bottom:1px solid #e8e0d0">الموكل</th><th style="padding:.45rem .7rem;text-align:right;color:var(--navy);font-size:.68rem;border-bottom:1px solid #e8e0d0">رقم الملف</th><th style="padding:.45rem .7rem;text-align:right;color:var(--navy);font-size:.68rem;border-bottom:1px solid #e8e0d0">نوع القضية</th><th style="padding:.45rem .7rem;text-align:right;color:var(--navy);font-size:.68rem;border-bottom:1px solid #e8e0d0">الإجراء</th><th style="padding:.45rem .7rem;text-align:right;color:var(--navy);font-size:.68rem;border-bottom:1px solid #e8e0d0">القاعة</th><th style="padding:.45rem .7rem;text-align:right;color:var(--navy);font-size:.68rem;border-bottom:1px solid #e8e0d0">الحالة</th></tr></thead><tbody>`;
+    list.forEach(({day,s},i)=>{
+      const stBg={pending:'#fff7ed',done:'#f0fdf4',postponed:'#fefce8',urgent:'#fef2f2',tabligh:'#f0fdfa',tanfidh:'#f5f3ff'}[s.status]||'#f0f0f0';
+      const stCl={pending:'#c2410c',done:'#166534',postponed:'#92400e',urgent:'#b91c1c',tabligh:'#0f766e',tanfidh:'#6d28d9'}[s.status]||'#333';
+      html+=`<tr style="background:${i%2?'#faf7f0':'#fff'}"><td style="padding:.42rem .7rem;font-weight:600;color:var(--navy)">${day}</td><td style="padding:.42rem .7rem;font-weight:700;color:var(--gold)">${s.time||'—'}</td><td style="padding:.42rem .7rem;font-weight:700">${s.client}${s.opponent?`<div style="font-size:.62rem;color:var(--muted)">ض: ${s.opponent}</div>`:''}</td><td style="padding:.42rem .7rem"><span style="font-family:monospace;background:var(--navy);color:var(--gold3);padding:1px 6px;border-radius:4px;font-size:.68rem">${s.filenum||'—'}</span></td><td style="padding:.42rem .7rem"><span class="badge type-${s.type}">${TL[s.type]||'—'}</span></td><td style="padding:.42rem .7rem;font-size:.7rem;color:var(--muted)">${PL[s.procedure]||'—'}</td><td style="padding:.42rem .7rem;font-size:.72rem">${s.room||'—'}</td><td style="padding:.42rem .7rem"><span style="font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:8px;background:${stBg};color:${stCl}">${STL[s.status]||'—'}</span></td></tr>`;
+    });
+    html+='</tbody></table></div>';
+  });
+  html+='</div>';
+  document.getElementById('roleBody').innerHTML=html;
+  document.getElementById('roleOverlay').classList.add('open');
+}
+function printRole(){const w=window.open('','_blank');w.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet"><style>body{font-family:'Tajawal',sans-serif;padding:1.5cm;color:#1a1208;direction:rtl}.badge{display:inline-block;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:8px;border:1px solid transparent}.type-civil{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}.type-commercial{background:#fff7ed;color:#c2410c;border-color:#fed7aa}.type-administrative{background:#f0fdfa;color:#0f766e;border-color:#99f6e4}.type-family{background:#fdf4ff;color:#7e22ce;border-color:#e9d5ff}.type-real-estate{background:#fdf8ec;color:#b45309;border-color:#fde68a}.type-criminal{background:#fef2f2;color:#b91c1c;border-color:#fecaca}.type-labor{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}</style></head><body>${document.getElementById('rpa').innerHTML}</body></html>`);w.document.close();setTimeout(()=>w.print(),800);}
+
+// ══════════════════════════════════════════════════════
+//  SORT
+// ══════════════════════════════════════════════════════
+function sortDay(dateISO){const other=sessions.filter(s=>s.date!==dateISO);const day=sessions.filter(s=>s.date===dateISO).sort((a,b)=>{const ai=CO.indexOf(a.court_type),bi=CO.indexOf(b.court_type);const cc=(ai<0?99:ai)-(bi<0?99:bi);return cc||((a.time||'').localeCompare(b.time||''));});sessions=[...other,...day];persist();renderWeek();showToast('🔃 تم الترتيب');}
+function sortAllDays(){sessions.sort((a,b)=>{const dc=(a.date||'').localeCompare(b.date||'');if(dc)return dc;const ai=CO.indexOf(a.court_type),bi=CO.indexOf(b.court_type);const cc=(ai<0?99:ai)-(bi<0?99:bi);return cc||((a.time||'').localeCompare(b.time||''));});persist();renderWeek();renderList();showToast('🔃 تم ترتيب جميع الجلسات');}
+
+// ══════════════════════════════════════════════════════
+//  MAHAKIM + EXPORT + DARK
+// ══════════════════════════════════════════════════════
+function openMahakim(fn){if(fn&&fn!=='—'){if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(fn).then(()=>showToast('📋 '+fn+' نُسخ — الصق بـ Ctrl+V')).catch(()=>fbCopy(fn));else fbCopy(fn);}window.open('https://www.mahakim.ma/#/suivi/dossier-suivi','_blank');}
+function fbCopy(t){const e=document.createElement('textarea');e.value=t;e.style.cssText='position:fixed;opacity:0';document.body.appendChild(e);e.select();try{document.execCommand('copy');showToast('📋 '+t+' نُسخ');}catch(err){}document.body.removeChild(e);}
+function exportCSV(){const h=['الموكل','رقم الملف','المحكمة','القاعة','نوع القضية','الإجراء','التاريخ','الساعة','الجلسة القادمة','الحالة','الأتعاب المتفق عليها','المدفوع','الملاحظات'];const r=sessions.map(s=>[s.client,s.filenum,(CM[s.court_type]||CM.ibt_tanger).label,s.room,TL[s.type],PL[s.procedure],s.date,s.time,s.next_hearing,STL[s.status],s.fees_agreed,s.fees_paid,(s.notes||'').replace(/\n/g,' ')]);const csv='\uFEFF'+[h,...r].map(row=>row.map(c=>`"${c||''}"`).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=`جلسات_بنسيسي_${new Date().toISOString().split('T')[0]}.csv`;a.click();showToast('📤 تم التصدير');}
+function toggleDark(){document.body.classList.toggle('dark');document.getElementById('darkBtn').textContent=document.body.classList.contains('dark')?'☀️':'🌙';}
+
+// ══════════════════════════════════════════════════════
+//  VIEWS + CLOSE
+// ══════════════════════════════════════════════════════
+function switchView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.sbtn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  const nb=document.getElementById('nav-'+v);if(nb)nb.classList.add('active');
+  if(v==='dash')    renderDash();
+  if(v==='cal')     renderCal();
+  if(v==='list')    renderList();
+  if(v==='clients') renderClients();
+  if(v==='fees')    renderFees();
+  if(v==='notif')   { renderNotif(); updateBadges(); }
+  if(v==='archive') renderArchive();
+  if(v==='tt')      renderTT();
+  if(v==='khubara') renderKh();
+  if(v==='tpl')     renderTemplates();
+}
+function changeWeek(d){weekOffset+=d;renderWeek();}
+function resetWeek(){weekOffset=0;renderWeek();}
+function setCF(ct){courtFilter=ct;document.querySelectorAll('.cf-btn').forEach(b=>b.classList.remove('active'));const el=document.getElementById('cf-'+ct);if(el)el.classList.add('active');renderWeek();}
+function closeOv(id){document.getElementById(id).classList.remove('open');}
+['addOverlay','detailOverlay','roleOverlay','ttOverlay','khOverlay','feeOverlay','clientOverlay'].forEach(id=>{document.getElementById(id).addEventListener('click',function(e){if(e.target===this)closeOv(id);});});
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+window.addEventListener('online',()=>{setSS('ok');showToast('✅ اتصال — جارٍ المزامنة');syncToFirestore();});
+window.addEventListener('offline',()=>{setSS('offline');showToast('📴 انقطع الإنترنت — البيانات محلية');});
+
+// ══════════════════════════════════════════════════════
+//  DEMO DATA
+// ══════════════════════════════════════════════════════
+function loadDemo(){
+  const days=getWD(0).map(iso);
+  const ad=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().split('T')[0];};
+  sessions=[
+    {id:'s01',client:'محمد الكريمي',filenum:'1245/25',court_type:'ibt_laracha',court_name:'ابتدائية العرائش',room:'قاعة 2',date:days[0],time:'09:00',status:'pending',type:'real-estate',procedure:'itirad',degree:'1',side:'plaintiff',opponent:'جماعة قبلية',judge:'',next_hearing:'',notes:'اعتراض على مطلب التحفيظ — حجج الملكية التاريخية',docs:'عقود الشراء القديمة',amount:'',fees_agreed:'8,000 درهم',fees_paid:'4,000 درهم'},
+    {id:'s02',client:'فاطمة بوشامة',filenum:'3389/25',court_type:'ibt_tanger',court_name:'ابتدائية طنجة',room:'قاعة 4',date:days[0],time:'09:30',status:'pending',type:'family',procedure:'hujaj',degree:'1',side:'plaintiff',opponent:'عبد الله بوشامة',judge:'',next_hearing:'',notes:'قضية نفقة وحضانة — الجلسة الثالثة',docs:'',amount:'',fees_agreed:'5,000 درهم',fees_paid:'5,000 درهم'},
+    {id:'s03',client:'شركة الريادة للتجارة',filenum:'778/25',court_type:'tijari',court_name:'تجارية طنجة',room:'قاعة 1',date:days[0],time:'10:00',status:'pending',type:'commercial',procedure:'talfiq',degree:'1',side:'defendant',opponent:'مورد دولي',judge:'',next_hearing:'',notes:'نزاع عقد توريد',docs:'',amount:'320,000 درهم',fees_agreed:'15,000 درهم',fees_paid:'7,000 درهم'},
+    {id:'s04',client:'علي الوزاني',filenum:'562/23',court_type:'ist_tanger',court_name:'استئناف طنجة',room:'قاعة 5',date:days[0],time:'10:30',status:'pending',type:'real-estate',procedure:'istinaf_proc',degree:'2',side:'appelant',opponent:'الجماعة الحضرية',judge:'',next_hearing:'',notes:'استئناف حكم تحفيظ',docs:'',amount:'',fees_agreed:'12,000 درهم',fees_paid:'12,000 درهم'},
+    {id:'s05',client:'لطيفة الخمسي',filenum:'1901/24',court_type:'ibt_tanger',court_name:'ابتدائية طنجة',room:'قاعة 3',date:days[0],time:'11:00',status:'urgent',type:'labor',procedure:'hukm',degree:'1',side:'plaintiff',opponent:'مؤسسة التعليم الخاص',judge:'',next_hearing:'',notes:'فصل تعسفي — ملف عاجل',docs:'',amount:'45,000 درهم',fees_agreed:'6,000 درهم',fees_paid:'0'},
+    {id:'s06',client:'رشيد المنصوري',filenum:'4456/25',court_type:'ibt_ksar',court_name:'ابتدائية القصر الكبير',room:'قاعة 2',date:days[1],time:'09:00',status:'pending',type:'civil',procedure:'khubara',degree:'1',side:'plaintiff',opponent:'شركة التأمين',judge:'',next_hearing:'',notes:'الخبير لم يودع تقريره بعد',docs:'',amount:'200,000 درهم',fees_agreed:'10,000 درهم',fees_paid:'5,000 درهم'},
+    {id:'s07',client:'مريم الإدريسي',filenum:'2210/25',court_type:'idari',court_name:'إدارية الرباط',room:'قاعة 7',date:days[1],time:'10:00',status:'urgent',type:'administrative',procedure:'itirad',degree:'1',side:'plaintiff',opponent:'وزارة التعليم',judge:'',next_hearing:'',notes:'طعن في قرار إحالة على التقاعد المبكر',docs:'',amount:'',fees_agreed:'8,000 درهم',fees_paid:'4,000 درهم'},
+    {id:'s08',client:'سعاد بنعمر',filenum:'3301/25',court_type:'ibt_laracha',court_name:'ابتدائية العرائش',room:'قاعة 4',date:days[1],time:'11:00',status:'pending',type:'real-estate',procedure:'tahfiz',degree:'1',side:'plaintiff',opponent:'جماعة قبلية',judge:'',next_hearing:'',notes:'تحفيظ عقار بمنطقة العرائش',docs:'',amount:'',fees_agreed:'7,000 درهم',fees_paid:'3,500 درهم'},
+    {id:'s09',client:'إبراهيم قاسم',filenum:'7788/23',court_type:'ist_kenitra',court_name:'استئناف القنيطرة',room:'قاعة 6',date:days[2],time:'10:30',status:'pending',type:'criminal',procedure:'istinaf_proc',degree:'2',side:'appelant',opponent:'النيابة العامة',judge:'',next_hearing:'',notes:'استئناف حكم جنحي — دفع بانعدام الاختصاص',docs:'',amount:'',fees_agreed:'20,000 درهم',fees_paid:'20,000 درهم'},
+    {id:'s10',client:'نادية الحداد',filenum:'4410/25',court_type:'ibt_souk',court_name:'ابتدائية سوق الأربعاء الغرب',room:'قاعة 3',date:days[2],time:'11:30',status:'pending',type:'labor',procedure:'niyaba',degree:'1',side:'plaintiff',opponent:'شركة النقل الدولي',judge:'',next_hearing:'',notes:'انتظار مطالعة النيابة العامة',docs:'',amount:'28,000 درهم',fees_agreed:'4,000 درهم',fees_paid:'2,000 درهم'},
+    {id:'s11',client:'عبد الرحيم بوعزة',filenum:'3312/25',court_type:'ibt_laracha',court_name:'ابتدائية العرائش',room:'قاعة 2',date:days[3],time:'09:00',status:'pending',type:'real-estate',procedure:'itirad',degree:'1',side:'defendant',opponent:'طالب التحفيظ',judge:'',next_hearing:'',notes:'اعتراض على تحفيظ — حجج الملكية',docs:'',amount:'',fees_agreed:'9,000 درهم',fees_paid:'0'},
+    {id:'s12',client:'سلمى برادة',filenum:'6670/25',court_type:'ist_tanger',court_name:'استئناف طنجة',room:'قاعة 5',date:days[3],time:'10:00',status:'pending',type:'civil',procedure:'hujaj',degree:'2',side:'respondent',opponent:'المستأنف الأصلي',judge:'',next_hearing:'',notes:'تقديم مذكرة الجواب — مطلوب الاستكمال قبل الجلسة',docs:'مذكرة الجواب',amount:'90,000 درهم',fees_agreed:'11,000 درهم',fees_paid:'5,000 درهم'},
+    {id:'s13',client:'عمر العلوي',filenum:'2230/25',court_type:'ibt_ksar',court_name:'ابتدائية القصر الكبير',room:'قاعة 1',date:days[3],time:'11:00',status:'postponed',type:'commercial',procedure:'ijraat',degree:'1',side:'plaintiff',opponent:'المدين التجاري',judge:'',next_hearing:ad(14),notes:'مؤجلة لتعذر التبليغ',docs:'',amount:'75,000 درهم',fees_agreed:'6,000 درهم',fees_paid:'3,000 درهم'},
+    {id:'s14',client:'كريم الفاسي',filenum:'6678/24',court_type:'ist_tanger',court_name:'استئناف طنجة',room:'قاعة 5',date:ad(-5),time:'14:00',status:'done',type:'civil',procedure:'hukm',degree:'2',side:'appelant',opponent:'بنك ضامن',judge:'',next_hearing:'',notes:'صدر الحكم لصالح الموكل',docs:'',amount:'500,000 درهم',fees_agreed:'25,000 درهم',fees_paid:'25,000 درهم'},
+    {id:'s15',client:'هشام المغراوي',filenum:'8891/24',court_type:'idari',court_name:'إدارية الرباط',room:'قاعة 8',date:days[3],time:'09:30',status:'tanfidh',type:'administrative',procedure:'tanfidh_proc',degree:'1',side:'plaintiff',opponent:'الجماعة الترابية',judge:'',next_hearing:'',notes:'تنفيذ حكم إداري — منع من البناء',docs:'',amount:'',fees_agreed:'10,000 درهم',fees_paid:'5,000 درهم'},
+  ];
+  ttFiles=[
+    {id:'tt01',client:'يوسف بلحاج',filenum:'9921/24',type:'tabligh',court:'tijari',date:days[1],opponent:'المدين المحكوم عليه',stage:'50',notes:'تبليغ على عنوان الطرف — محاولة ثانية جارية'},
+    {id:'tt02',client:'هشام المغراوي',filenum:'8891/24',type:'tanfidh',court:'idari',date:days[3],opponent:'الجماعة الترابية',stage:'75',notes:'تم الحصول على أمر التنفيذ — ينتظر الحجز'},
+  ];
+  khubaraFiles=[
+    {id:'kh01',client:'رشيد المنصوري',filenum:'4456/25',kh_court:'ibt_tanger',type:'civil',opponent:'شركة التأمين',judge:'',kh_expert_name:'محمد الحسيني',kh_expert_specialty:'خبير عقاري',kh_appoint_date:ad(-30),kh_deadline:ad(5),kh_report_deadline:ad(20),kh_provision:'5,000 درهم',kh_paid:'5,000 درهم',kh_payment_status:'done',kh_payer:'plaintiff',kh_payment_date:ad(-25),kh_stage:'ongoing',kh_status:'active',kh_notes:'الخبرة جارية — تم أداء الاحتياطي'},
+    {id:'kh02',client:'مجموعة كراون',filenum:'1120/25',kh_court:'tijari',type:'commercial',opponent:'مقاول باطن',judge:'',kh_expert_name:'عبد الرحمن الزياتي',kh_expert_specialty:'خبير مقاولات',kh_appoint_date:ad(-60),kh_deadline:ad(-5),kh_report_deadline:ad(10),kh_provision:'8,000 درهم',kh_paid:'4,000 درهم',kh_payment_status:'partial',kh_payer:'both',kh_payment_date:ad(-40),kh_stage:'draft',kh_status:'delayed',kh_notes:'تأخر في إيداع مشروع التقرير — تجاوز الأجل 5 أيام'},
+  ];
+  feeRecords=[
+    {id:'f01',client:'محمد الكريمي',filenum:'1245/25',fee_type:'real-estate',fee_agreed:'8,000 درهم',fee_paid:'4,000 درهم',fee_status:'partial',fee_due:ad(30),fee_notes:'متفق على الدفع على مرحلتين'},
+    {id:'f02',client:'فاطمة بوشامة',filenum:'3389/25',fee_type:'family',fee_agreed:'5,000 درهم',fee_paid:'5,000 درهم',fee_status:'paid',fee_due:ad(-10),fee_notes:''},
+    {id:'f03',client:'شركة الريادة',filenum:'778/25',fee_type:'commercial',fee_agreed:'15,000 درهم',fee_paid:'7,000 درهم',fee_status:'partial',fee_due:ad(15),fee_notes:'نصف المبلغ عند صدور الحكم'},
+    {id:'f04',client:'لطيفة الخمسي',filenum:'1901/24',fee_type:'labor',fee_agreed:'6,000 درهم',fee_paid:'0',fee_status:'overdue',fee_due:ad(-20),fee_notes:'متأخرة عن السداد'},
+  ];
+  persist();
+}
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+function renderAll(){renderWeek();renderDash();updateBadges();}
+async function initApp(){
+  setSS('syncing');
+  document.getElementById('weekGrid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#c9a84c;font-size:.9rem">🔄 جارٍ تحميل البيانات...</div>';
+  const loaded=await loadFromFirestore();
+  if(!loaded&&!sessions.length) loadDemo();
+  renderAll();
+  startRealtimeSync();
+  updateLastSyncDisplay();
+  setInterval(updateLastSyncDisplay,60000);
+}
+</script>
+</body>
+</html>
